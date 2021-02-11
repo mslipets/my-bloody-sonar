@@ -1,0 +1,52 @@
+name: main
+on:
+  push:
+    branches-ignore:
+      - '**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dist: [lts, community, developer, enterprise]
+    steps:
+      - name: Setup BATS
+        uses: mig4/setup-bats@v1
+
+      - uses: actions/checkout@v2
+
+      - name: test test-${{ matrix.dist }}
+        run: make test-${{ matrix.dist }}
+
+  deploy-tag:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v2
+      - name: docker login
+        shell: bash
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - name: deploy
+        run: |-
+          TAG="$(echo ${{ github.event.ref }} | sed 's|refs/tags/||g')"
+          ./publish.sh $TAG
+
+  deploy-latest:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: docker login
+        shell: bash
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - name: deploy
+        run: ./publish.sh latest
+
