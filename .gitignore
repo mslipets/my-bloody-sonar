@@ -17,3 +17,4 @@ vars/aws_generated/
 .data
 .vscode
 .venv
+venv
