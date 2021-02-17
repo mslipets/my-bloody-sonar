@@ -21,7 +21,7 @@ As [original quote](https://github.com/mslipets/my-bloody-sonar#why-use-the-term
 "The term "My Bloody SonarQube" came from the fact that I tried to put all my "battle" experience, (i.e. blood, sweat and tears) within the image.
 I just thought it is a "catchy" name for this kind of a repository." (c) [Ohad David](https://github.com/odavid)
 <br>
-I thought this epithets is also pretty suitable for this custom SonarQube image.
+I thought these epithets is also pretty suitable for this custom SonarQube image.
 
 ## Demo
 //TODO
