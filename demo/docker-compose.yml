@@ -7,21 +7,20 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 
-
   sonar:
     image: mslipets/my-bloody-sonar:latest
     depends_on:
       - postgres
       - ldap
     volumes:
-      - './DEMO_SONAR_HOME:/opt/sonarqube'
+      - './DEMO_SONAR_HOME/extensions:/opt/sonarqube/extensions'
+      - './DEMO_SONAR_HOME/data:/opt/sonarqube/data'
       - './config.yml:/config.yml'
     ports:
       - '9000:9000'
     links:
       - postgres
       - ldap
-
     environment:
       SONAR_ADMIN_USERNAME: "sonar.admin"
       SONAR_ADMIN_PASSWORD: "sonar.admin.password"
@@ -30,22 +29,22 @@ services:
       SONAR_ENV_PLUGINS: ""
       SONAR_JDBC_USERNAME: postgres
       SONAR_JDBC_PASSWORD: postgres
-      SONAR_JDBC_URL: "jdbc:postgresql://postgres:5432/sonar?gssEncMode=disable&sslmode=require"
+      SONAR_JDBC_URL: "jdbc:postgresql://postgres:5432/sonar?gssEncMode=disable"
       # proxy
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
       no_proxy: ${no_proxy}
 
-    ldap:
-      image: osixia/openldap:1.2.1
-      volumes:
-        - ./assets/ldap/bootstrap/custom.ldif:/container/service/slapd/assets/config/bootstrap/ldif/100-custom.ldif
-      ports:
-        - '10389:389'
-      environment:
-        LDAP_DOMAIN: example.org
-        LDAP_BASE_DN: dc=example,dc=org
-        LDAP_ADMIN_PASSWORD: admin
-        LDAP_READONLY_USER: 'true'
-        LDAP_TLS: "false"
-      command: --copy-service --loglevel debug
+  ldap:
+    image: osixia/openldap:1.2.1
+    volumes:
+      - ./assets/ldap/bootstrap/custom.ldif:/container/service/slapd/assets/config/bootstrap/ldif/100-custom.ldif
+    ports:
+      - '10389:389'
+    environment:
+      LDAP_DOMAIN: example.org
+      LDAP_BASE_DN: dc=example,dc=org
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_READONLY_USER: 'true'
+      LDAP_TLS: "false"
+    command: --copy-service --loglevel debug

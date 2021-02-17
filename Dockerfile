@@ -12,7 +12,6 @@ ARG CURL_OPTIONS=-sSfLk
 # Using root to install and run entrypoint.
 # We will change the user to sonarqube using gosu
 USER root
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install plugins
 #TODO: parse plugins list elswhere and invoke:
@@ -55,9 +54,10 @@ ENV TOKEN_FILE_LOCATION=/dev/shm/.api-token
 ENV CONFIG_CACHE_DIR=/dev/shm/.sonar-config-cache
 
 RUN chown -R sonarqube:sonarqube "$SONARQUBE_HOME"
-COPY --chown=sonarqube:sonarqube bin/* ${SONARQUBE_HOME}/bin/
+COPY --chown=sonarqube:sonarqube bin/* /usr/bin/
 
 # We will change the user to sonarqube using gosu
 WORKDIR ${SONARQUBE_HOME}
 EXPOSE 9000
-ENTRYPOINT ["bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+CMD []

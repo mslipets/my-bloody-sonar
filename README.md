@@ -24,6 +24,12 @@ I just thought it is a "catchy" name for this kind of a repository." (c) [Ohad D
 I thought these epithets is also pretty suitable for this custom SonarQube image.
 
 ## Demo
+
+> Note: for proper ElasticSearch service startup in sonar container `vm.max_map_count=262144` <br>
+> should be adjusted on host:<br>
+`sudo sysctl -w vm.max_map_count=262144`
+
+
 //TODO
 
 ## Some Usage Examples
@@ -88,7 +94,7 @@ Besides all [Environment variables](https://docs.sonarqube.org/latest/setup/envi
   * `file://<filepath>` - a file path (should be mapped as volume) - can be a file, folder or glob expression (e.g. `file:///dir/filename` or `file:///dir` or `file:///dir/*.yml`)
   * `http[s]://<path>` - an http endpoint
 
-> Note: If multiple URLs are passed or the file url contains a dir name or a glob expression, all yaml files are being deep merged top to bottom. This behavior enables to separate the configuration into different files or override default configuration.
+> Note: If multiple URLs are passed, or the file url contains a dir name or a glob expression, all yaml files are being deep merged top to bottom. This behavior enables to separate the configuration into different files or override default configuration.
 
 
 * `SONAR_ENV_CONFIG_YML_URL_DISABLE_WATCH` - If equals to 'true', then the configuration file will be fetched only at startup, but won't be watched. Default 'false'

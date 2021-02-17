@@ -2,6 +2,7 @@
 set -e
 
 program=$0
+script_dir=$(cd $(dirname "$0"); pwd)
 
 usage(){
     cat << EOF
@@ -65,7 +66,7 @@ fetch_config(){
 exec_command(){
     if [ -n "$COMMAND" ]; then
         log "Running $COMMAND."
-        $COMMAND "${FILENAME}"
+        aws-env exec -- "${script_dir}/${COMMAND} ${FILENAME}"
         log "Running $COMMAND. Done..."
     fi
 }
