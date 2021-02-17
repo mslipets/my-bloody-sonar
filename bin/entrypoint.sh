@@ -4,7 +4,7 @@ if [ -z "$AWS_REGION" ] && [ -z "$AWS_DEFAULT_REGION" ]; then
     export AWS_REGION="eu-west-1"
 fi
 
-export ssm_env="${SONARQUBE_HOME}/bin/start-with-params.sh"2
+export ssm_env="/usr/local/bin/aws-env exec"
 
 if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
     JAVA_OPTS_VARIABLES=$(compgen -v | while read line; do echo "$line" | grep JAVA_OPTS_;done) || true
@@ -17,8 +17,8 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
         echo -n "$SONAR_ENV_CONFIG_YAML" > "$CONFIG_FILE_LOCATION"
         unset SONAR_ENV_CONFIG_YAML
     elif [ -n "${SONAR_ENV_CONFIG_YML_URL}" ]; then
-        echo "Fetching config from URL: ${SONAR_ENV_CONFIG_YML_URL}"
-         ssm_env watch-config.sh \
+          echo "Fetching config from URL: ${SONAR_ENV_CONFIG_YML_URL}"
+          ssm_env watch-config.sh \
              --debug \
              --cache-dir "$CONFIG_CACHE_DIR" \
              --url "${SONAR_ENV_CONFIG_YML_URL}" \
@@ -31,8 +31,6 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
                 --url "${SONAR_ENV_CONFIG_YML_URL}" \
                 --polling-interval "${SONAR_ENV_CONFIG_YML_URL_POLLING:-30}" &
         fi
-        unset AWS_ACCESS_KEY_ID
-        unset AWS_SECRET_ACCESS_KEY
     fi
 
     if [ -n "$SONAR_ENV_PLUGINS" ]; then
@@ -57,7 +55,7 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
 
     # This changes the actual command to run the original sonarqube entrypoint
     # using the sonarqube user
-    set -- gosu sonarqube ssm_env "$@"
+    set -- gosu sonarqube ssm_env "bin/start.sh" "$@"
 fi
 
-ssm_env "$@"
+exec "$@"
