@@ -54,10 +54,11 @@ ENV TOKEN_FILE_LOCATION=/dev/shm/.api-token
 ENV CONFIG_CACHE_DIR=/dev/shm/.sonar-config-cache
 
 RUN chown -R sonarqube:sonarqube "$SONARQUBE_HOME"
-COPY --chown=sonarqube:sonarqube bin/* /usr/bin/
+COPY --chown=sonarqube:sonarqube bin/* $SONARQUBE_HOME/bin/
 
 # We will change the user to sonarqube using gosu
+ENV PATH="${SONARQUBE_HOME}/bin":$PATH
 WORKDIR ${SONARQUBE_HOME}
 EXPOSE 9000
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 CMD []

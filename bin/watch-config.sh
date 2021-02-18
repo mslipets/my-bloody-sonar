@@ -33,7 +33,7 @@ _md5(){
 
 fetch_config(){
     fetchconfig.py --source "${URL}" --out "${CACHE_DIR}/${FILE_BASENAME}"
-    PROCESS_COMMAND="processconfig.py --source ${CACHE_DIR}/${FILE_BASENAME} --out ${CACHE_DIR}/${FILE_BASENAME}"
+    PROCESS_COMMAND="${script_dir}/processconfig.py --source ${CACHE_DIR}/${FILE_BASENAME} --out ${CACHE_DIR}/${FILE_BASENAME}"
     [[ -n "${ENVVARS_DIRS}" ]] && PROCESS_COMMAND="$PROCESS_COMMAND --env-dirs ${ENVVARS_DIRS}"
     if [[ "$DEBUG" == "YES" ]]; then
         DEBUG=YES envconsul-wrapper.sh "$PROCESS_COMMAND"
@@ -66,7 +66,8 @@ fetch_config(){
 exec_command(){
     if [ -n "$COMMAND" ]; then
         log "Running $COMMAND."
-        aws-env exec -- "${script_dir}/${COMMAND} ${FILENAME}"
+#TODO: remove debug flag
+        aws-env exec -- "$COMMAND" -f "$FILENAME" --debug
         log "Running $COMMAND. Done..."
     fi
 }
