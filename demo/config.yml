@@ -1,18 +1,24 @@
 sonar:
   security:
     realm: LDAP
-  # https://docs.sonarqube.org/latest/instance-administration/delegated-auth/#header-5
-  ldap:
-    url: ldap://ldap:389
-    bindPassword: "admin"
-    realm: example.org
-    user:
-      baseDn: "cn=users,dc=example,dc=org"
-      emailAttribute: mail
-  forceAuthentication: false
+  forceAuthentication: true
+  core:
+      serverBaseURL: "http://localhost:9000"
   lf:
     logoUrl: "https://i.ytimg.com/vi/UN-NgihqbLM/hqdefault.jpg"
     aboutText: "My Bloody Sonar 'About Text' example."
   dbcleaner:
     daysBeforeDeletingInactiveBranchesAndPRs: 30
 
+# https://docs.sonarqube.org/latest/instance-administration/delegated-auth/#header-5
+ldap:
+  url: ldap://ldap:389
+  bindPassword: admin
+  bindDn: cn=admin,ou=users,o=example.org
+  realm: example.org
+  user:
+    baseDn: cn=users,dc=example,dc=org
+    emailAttribute: mail
+    realNameAttribute: cn
+  group:
+    baseDn: cn=groups,dc=example,dc=org
