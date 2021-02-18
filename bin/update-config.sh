@@ -108,11 +108,11 @@ secure_admin_credentials() {
 update_sonar_properties() {
     local setting="$1"
     local file="$sonar_properties_file"
-    debug "updating in $update_sonar_properties: ${setting}"
+    debug "updating $(basename "$sonar_properties_file"): ${setting}"
     local setting_key="${setting%=*}"
     if grep -q "$setting_key" "$file"; then
-        debug "sed -i 's/^.*\b$setting_key\b.*$/$setting/' $file"
-        sed -i 's/^.*\b"$setting_key"\b.*$/"$setting"/' "$file"
+        debug "sed -i 's@^.*\b'\"$setting_key\"'\b.*\$@'\"$setting\"'@' $file"
+        sed -i 's@^.*\b'"$setting_key"'\b.*$@'"$setting"'@' "$file"
     else
         echo "$property_line" >>"$file"
     fi
