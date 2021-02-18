@@ -20,5 +20,6 @@ ldap:
     baseDn: cn=users,dc=example,dc=org
     emailAttribute: mail
     realNameAttribute: cn
+    request: (&(objectClass=inetOrgPerson)(uid={login}))
   group:
     baseDn: cn=groups,dc=example,dc=org

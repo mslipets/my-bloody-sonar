@@ -129,6 +129,7 @@ update_config() {
 
     for setting in "${config_map[@]}"; do
         if [[ "$setting" == "ldap"* ]]; then
+            update_sonar_properties "sonar.security.realm=LDAP"
             update_sonar_properties "$setting"
         else
             local setting_key="${setting%=*}"
