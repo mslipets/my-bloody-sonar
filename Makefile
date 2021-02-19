@@ -15,7 +15,6 @@ build:
 test: build
 #	bats tests
 
-
 #update-plugins:
 #	env python3 $(PWD)/get-latest-plugins.py
 #	git diff plugins.txt | grep  '^+' | sed 's|+||' | grep -v + | awk -F \: '{print "* ["$$1":"$$2"](https://plugins.jenkins.io/" $$1 ")"}'

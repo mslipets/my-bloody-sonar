@@ -36,10 +36,10 @@ fetch_config(){
     PROCESS_COMMAND="${script_dir}/processconfig.py --source ${CACHE_DIR}/${FILE_BASENAME} --out ${CACHE_DIR}/${FILE_BASENAME}"
     [[ -n "${ENVVARS_DIRS}" ]] && PROCESS_COMMAND="$PROCESS_COMMAND --env-dirs ${ENVVARS_DIRS}"
     if [[ "$DEBUG" == "YES" ]]; then
-        DEBUG=YES envconsul-wrapper.sh "$PROCESS_COMMAND"
+        DEBUG=YES envconsul-wrapper.sh $PROCESS_COMMAND
     else
         {
-            envconsul-wrapper.sh "$PROCESS_COMMAND"
+            envconsul-wrapper.sh $PROCESS_COMMAND
         } &>/dev/null
     fi
 
@@ -66,8 +66,7 @@ fetch_config(){
 exec_command(){
     if [ -n "$COMMAND" ]; then
         log "Running $COMMAND."
-#TODO: remove debug flag
-        aws-env exec -- "$COMMAND" -f "$FILENAME" --debug
+        aws-env exec -- "$COMMAND" -f "$FILENAME"
         log "Running $COMMAND. Done..."
     fi
 }

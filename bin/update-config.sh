@@ -72,7 +72,7 @@ generate_token() {
     if [[ ! -f "${token_file}" ]]; then
         curl -s -u "${SONAR_ADMIN_USERNAME}":"${SONAR_ADMIN_PASSWORD}" -H "${http_hdr}" \
             -X POST -d "login=${SONAR_ADMIN_USERNAME}&name=${token_name}" \
-            "${sonar_url}/api/user_tokens/generate" -o - | jq -r '.token' >>"${token_file}"
+            "${sonar_url}/api/user_tokens/generate" -o - | jq -r '.token' >> "${token_file}"
 
         if [[ $token_name != $(curl -s -u "${SONAR_ADMIN_USERNAME}":"${SONAR_ADMIN_PASSWORD}" -H "${http_hdr}" \
             "${sonar_url}/api/user_tokens/search" -o - |
@@ -114,7 +114,7 @@ update_sonar_properties() {
         debug "sed -i 's@^.*\b'\"$setting_key\"'\b.*\$@'\"$setting\"'@' $file"
         sed -i 's@^.*\b'"$setting_key"'\b.*$@'"$setting"'@' "$file"
     else
-        echo "$property_line" >>"$file"
+        echo "$property_line" >> "$file"
     fi
 }
 
