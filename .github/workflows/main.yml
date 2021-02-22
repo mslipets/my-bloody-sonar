@@ -18,35 +18,56 @@ jobs:
       - name: test test-${{ matrix.dist }}
         run: make test-${{ matrix.dist }}
 
-  deploy-tag:
+  deploy-tags:
     needs: test
     runs-on: ubuntu-latest
+    strategy:
+          matrix:
+            dist: [lts, community, developer, enterprise]
+
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v2
-      - name: docker login
-        shell: bash
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-      - name: deploy
-        run: |-
-          TAG="$(echo ${{ github.event.ref }} | sed 's|refs/tags/||g')"
-          ./publish.sh $TAG
 
-  deploy-latest:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          tags: mslipets/my-bloody-sonar:${{ github.ref }}
+          build-args:
+            FROM_TAG: ${{ github.ref }}
+
+      - name: Image digest
+              run: echo ${{ steps.docker_build.outputs.digest }}
+
+  deploy-versions:
     needs: test
     runs-on: ubuntu-latest
     if: github.event.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-      - name: docker login
-        shell: bash
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-      - name: deploy
-        run: ./publish.sh latest
 
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          tags: mslipets/my-bloody-sonar:latest
+          build-args:
+            FROM_TAG: latest
+
+      - name: Image digest
+              run: echo ${{ steps.docker_build.outputs.digest }}

@@ -15,6 +15,7 @@ build:
 test: build
 #	bats tests
 
+#TODO: https://github.com/mslipets/my-bloody-sonar/issues/1
 #update-plugins:
 #	env python3 $(PWD)/get-latest-plugins.py
 #	git diff plugins.txt | grep  '^+' | sed 's|+||' | grep -v + | awk -F \: '{print "* ["$$1":"$$2"](https://plugins.jenkins.io/" $$1 ")"}'

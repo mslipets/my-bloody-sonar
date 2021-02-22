@@ -38,7 +38,7 @@ Docker Images are pushed to [Docker Hub](https://hub.docker.com/r/mslipets/my-bl
 Each release is a git tag v$VERSION-$INCREMENT where:
 
 * VERSION is the SonarQube version
-* INCREMENT is a number representing that representing the release contents (i.e additional configuration options, bugs in configuration, plugins, etc...)
+* INCREMENT is a number that representing the release contents (i.e additional configuration options, bugs in configuration, plugins, etc...)
 
 For each git tag, there following tags will be created:
 * $VERSION-$INCREMENT - one to one relationship with git tag
@@ -46,18 +46,24 @@ For each git tag, there following tags will be created:
 * lts - represents the latest release
 
 
-Each master commit, will be tagged as latest
-
+get the [LTS](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) release (openjdk:11-jre-slim) alternative tags: [7.9.5-community, 7.9-community, lts](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
-# get the LTS release (openjdk:11-jre-slim) alternative tags: 7.9.5-community, 7.9-community, lts
 docker pull mslipets/my-bloody-sonar:lts
-# get the latest community version (alpine) alternative tags: 8.6.1-community, 8.6-community, 8-community, community, latest
-docker pull mslipets/my-bloody-sonar:latest #
-# get the latest developer version (alpine) alternative tags: 8.6.1-developer, 8.6-developer, 8-developer, developer
+```
+get the [latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) [community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-community, 8.6-community, 8-community, community, latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+```bash
+docker pull mslipets/my-bloody-sonar:latest
+```
+get the latest [developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-developer, 8.6-developer, 8-developer, developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+```bash
 docker pull mslipets/my-bloody-sonar:developer
-# get the latest enterprise version (alpine) alternative tags: 8.6.1-enterprise, 8.6-enterprise, 8-enterprise, enterprise
-docker pull mslipets/my-bloody-sonar:enterprise
-# get a concrete 8.6.1-developer release
+```
+get the latest [enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-enterprise, 8.6-enterprise, 8-enterprise, enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+```bash
+docker pull mslipets/my-bloody-sonar:[enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+```
+get a concrete 8.6.1-developer release
+```bash
 docker pull mslipets/my-bloody-sonar:8.6.1-developer
 
 ```
@@ -68,7 +74,7 @@ The following Environment variables are supported
 Besides all [Environment variables](https://docs.sonarqube.org/latest/setup/environment-variables/) supported by [Official Docker image for SonarQube](https://hub.docker.com/_/sonarqube)
 
 
-* `SONAR_ADMIN_USERNAME` - (***mandatory***) Represents the name of the admin user. If LDAP/SAML is your choice of authentication, then this should be a valid LDAP user id. If using own Database, then you also need to pass the password of this user within the [configuration](#configuration-reference).
+* `SONAR_ADMIN_USERNAME` - (***mandatory***) Represents the name of the admin user. If LDAP/SAML is your choice of authentication, then this should be a valid IDP user id. If using own Database, then you also need to pass the password of this user within the [configuration](#configuration-reference).
 
 > Bare minimum to be set is:<br>
 `SONAR_ADMIN_USERNAME`<br>
@@ -102,10 +108,18 @@ Besides all [Environment variables](https://docs.sonarqube.org/latest/setup/envi
 
 
 ## Configuration Reference
-The configuration is divided into main configuration sections. Each section is responsible for a specific aspect of SonarQube configuration.
+The configuration is provided in yaml format, 
+each node with value is corresponds to sonarqube property 
+(can be lookup on gui) or in sonar.properies file.
+
+Each key is responsible for a specific aspect of SonarQube configuration.
 
 
 ## [Credits](CREDITS.md)
+
+  - [Ohad David](https://github.com/odavid) for [My Bloody Jenkins](https://github.com/odavid/my-bloody-jenkins)
+  - [Telia OSS](https://github.com/telia-oss) for [aws-env](https://github.com/telia-oss/aws-env) and [terraform-aws-sonarqube](https://github.com/telia-oss/terraform-aws-sonarqube)
+  - [SonarSource](https://github.com/SonarSource) for original [docker-sonarqube](https://github.com/SonarSource/docker-sonarqube)
 
 
 ## License
