@@ -9,11 +9,15 @@ ability to configure most aspects of SonarQube from a **simple** and **single so
 
 The image can get the configuration from several data sources such as: File, S3, Environment Variable, HTTP, Kubernetes ConfigMap and Kubernetes Secret.
 
-//TODO: The image supports "Watching" configuration changes and applying them immediately without restarting SonarQube.
+The image supports "Watching" configuration changes and applying them immediately without restarting SonarQube.
 
 ## Features
 * Configuration Coverage:
-//TODO:  * Authorization
+  * pretty all settings under sonar.* properties namespace
+  * ldap.* properties, although full application of it might require a restart of web engine. 
+    (therefore [Environment variables](https://docs.sonarqube.org/latest/setup/environment-variables/#header-4) is recommended)
+    
+
 
 
 ## Why Use the term "Bloody"?
@@ -23,17 +27,9 @@ I just thought it is a "catchy" name for this kind of a repository." (c) [Ohad D
 <br>
 I thought these epithets is also pretty suitable for this custom SonarQube image.
 
-## Demo
+## Demo and Usage Example
 
-> Note: for proper ElasticSearch service startup in sonar container `vm.max_map_count=262144` <br>
-> should be adjusted on host:<br>
-`sudo sysctl -w vm.max_map_count=262144`
-
-
-//TODO
-
-## Some Usage Examples
-//TODO
+A [demo](demo) can be found [here](demo/README.md)
 
 
 ## Releases
@@ -109,10 +105,7 @@ Besides all [Environment variables](https://docs.sonarqube.org/latest/setup/envi
 The configuration is divided into main configuration sections. Each section is responsible for a specific aspect of SonarQube configuration.
 
 
-
-
-
-
+## [Credits](CREDITS.md)
 
 
 ## License

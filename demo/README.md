@@ -9,8 +9,10 @@ Running [docker-compose.yml](docker-compose.yml) that contains the following ser
 
 
 ## Prerequisites
-* docker for mac/windows/linux
-* docker-compose
+
+* docker and docker-compose are installed
+
+* Note: for proper ElasticSearch service startup in sonar container `vm.max_map_count=262144` should be adjusted on host.
 
 > If you have a corporate proxy, please fill the proxy information inside [.env](.env) file.
 
@@ -51,7 +53,7 @@ open http://localhost:8080
 
 
 ### Enable guest read access
-We will enable guests to see dashboard and projects scans results.
+We will enable guests to see dashboard and projects scans results without authentication.
 
 ```shell
 cat config-templates/03-force-auth-off.yml >> config.yml; sleep 10
