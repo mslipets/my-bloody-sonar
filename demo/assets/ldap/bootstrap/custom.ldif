@@ -33,9 +33,9 @@ objectclass: top
 objectClass: groupOfNames
 member: uid=sonar.admin,ou=users,{{ LDAP_BASE_DN }}
 
-dn: uid=sonar.admin,ou=users,{{ LDAP_BASE_DN }}
+dn: uid=ldap.sonar.admin,ou=users,{{ LDAP_BASE_DN }}
 changetype: add
-uid: sonar.admin
+uid: ldap.sonar.admin
 cn: Sonar Admin
 sn: Sonar
 objectClass: top

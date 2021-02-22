@@ -17,8 +17,9 @@ Running [docker-compose.yml](docker-compose.yml) that contains the following ser
 ### Starting up a clean sonar
 
 ```shell
-docker-compose up -d; sleep 30
+docker-compose up -d; sleep 60
 open http://localhost:9000
+
 ```
 
 after startup sonar gets preconfigured with new custom admin user with a name and password<br>
@@ -31,7 +32,7 @@ We will add `serverBaseURL`, `logoUrl` `aboutText`
 
 ```shell
 cat config-templates/01-general-config.yml >> config.yml; sleep 10
-open http://localhost:8080
+open http://localhost:9000/admin/settings
 ```
 
 ### Adding LDAP Config

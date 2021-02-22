@@ -1,5 +1,4 @@
 sonar:
-  forceAuthentication: true
   core:
       serverBaseURL: "http://localhost:9000"
   lf:
