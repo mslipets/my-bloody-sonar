@@ -13,7 +13,7 @@ build:
 	docker build --rm --force-rm -t mslipets/my-bloody-sonar $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(VERSION) .
 
 test: build
-#	bats tests
+	bats tests
 
 #TODO: https://github.com/mslipets/my-bloody-sonar/issues/1
 #update-plugins:

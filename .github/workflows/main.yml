@@ -1,29 +1,31 @@
 name: main
 on:
   push:
-    branches-ignore:
-      - '**'
+    branches:
+      - develop
+
 jobs:
+
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dist: [lts, community, developer, enterprise]
+        version: [lts, community, developer, enterprise]
     steps:
       - name: Setup BATS
         uses: mig4/setup-bats@v1
 
       - uses: actions/checkout@v2
 
-      - name: test test-${{ matrix.dist }}
-        run: make test-${{ matrix.dist }}
+      - name: test test-${{ matrix.version }}
+        run: make test VERSION=${{ matrix.version }}
 
   deploy-tags:
     needs: test
     runs-on: ubuntu-latest
     strategy:
           matrix:
-            dist: [lts, community, developer, enterprise]
+            version: [lts, community, developer, enterprise]
 
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
@@ -45,7 +47,7 @@ jobs:
             FROM_TAG: ${{ github.ref }}
 
       - name: Image digest
-              run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo ${{ steps.docker_build.outputs.digest }}
 
   deploy-versions:
     needs: test
@@ -70,4 +72,4 @@ jobs:
             FROM_TAG: latest
 
       - name: Image digest
-              run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo ${{ steps.docker_build.outputs.digest }}
