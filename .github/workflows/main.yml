@@ -12,8 +12,6 @@ on:
 env:
   push_to_dockerhub: true
 
-    branches-ignore:
-      - '**'
 jobs:
 
   getversion:
