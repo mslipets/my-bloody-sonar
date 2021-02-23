@@ -47,6 +47,7 @@ function docker_compose_exec(){
 
 function health_check(){
     url=$1
+    echo "checking $url"
     while ! curl -f -s "$url" > /dev/null
     do
         sleep 5
@@ -60,5 +61,5 @@ function create_docker_network(){
 }
 
 function destroy_docker_network(){
-    docker network rm $SONAR_DOCKER_NETWORK_NAME
+    docker network rm "$SONAR_DOCKER_NETWORK_NAME"
 }
