@@ -3,6 +3,9 @@ on:
   push:
     branches-ignore:
       - '**'
+    tags:
+      - 'v*'
+      
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -42,10 +45,10 @@ jobs:
           push: false
           tags: mslipets/my-bloody-sonar:${{ github.ref }}
           build-args:
-            FROM_TAG: ${{ github.ref }}
+           - FROM_TAG: ${{ github.ref }}
 
       - name: Image digest
-              run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo ${{ steps.docker_build.outputs.digest }}
 
   deploy-versions:
     needs: test
@@ -67,7 +70,7 @@ jobs:
           push: false
           tags: mslipets/my-bloody-sonar:latest
           build-args:
-            FROM_TAG: latest
+           - FROM_TAG: latest
 
       - name: Image digest
-              run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo ${{ steps.docker_build.outputs.digest }}
