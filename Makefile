@@ -10,7 +10,7 @@ build-all: build
 test-all: test
 
 build:
-	docker build --rm --force-rm -t mslipets/my-bloody-sonar $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(VERSION) .
+	docker build --rm --force-rm -t mslipets/my-bloody-sonar-test:$(VERSION) $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(VERSION) .
 
 test: build
 	bats tests
