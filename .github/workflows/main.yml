@@ -26,8 +26,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     strategy:
-          matrix:
-            version: [lts, community, developer, enterprise]
+      matrix:
+        version: [lts, community, developer, enterprise]
 
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
@@ -46,7 +46,7 @@ jobs:
           push: false
           tags: mslipets/my-bloody-sonar:${{ github.ref }}
           build-args:
-            FROM_TAG: ${{ github.ref }}
+            FROM_TAG: ${{ github.ref }}-${{ matrix.version }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
@@ -54,6 +54,9 @@ jobs:
   deploy-versions:
     needs: test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [lts, community, developer, enterprise]
     if: github.event.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
@@ -71,7 +74,7 @@ jobs:
           push: false
           tags: mslipets/my-bloody-sonar:latest
           build-args:
-            FROM_TAG: latest
+            FROM_TAG: ${{ matrix.version }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
