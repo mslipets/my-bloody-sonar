@@ -2,7 +2,8 @@ version: '2'
 services:
 
   sonar:
-    image: mslipets/my-bloody-sonar:${VERSION}
+    # this weird shitty stuff with version in name due to https://github.com/docker/compose/issues/3660
+    image: mslipets/my-bloody-sonar-${VERSION}
     depends_on:
       - postgres
     volumes:

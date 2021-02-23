@@ -24,4 +24,4 @@ services:
 networks:
   default:
     external:
-      name: ${JENKINS_DOCKER_NETWORK_NAME}
+      name: ${SONAR_DOCKER_NETWORK_NAME}

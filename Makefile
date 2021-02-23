@@ -10,7 +10,8 @@ build-all: build
 test-all: test
 
 build:
-	docker build --rm --force-rm -t mslipets/my-bloody-sonar-test:$(VERSION) $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(VERSION) .
+	# this weird shitty stuff with version in name due to https://github.com/docker/compose/issues/3660
+	docker build --rm --force-rm -t mslipets/my-bloody-sonar-${VERSION} $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(VERSION) .
 
 test: build
 	bats tests

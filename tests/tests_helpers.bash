@@ -11,6 +11,7 @@ function touch_config(){
     mkdir -p "$TESTS_HOST_CONF_DIR"
     touch "$TESTS_HOST_CONF_DIR/config.yml"
 }
+
 function truncate_config(){
     truncate -s "$TESTS_HOST_CONF_DIR/config.yml"
 }
@@ -29,7 +30,7 @@ function run_script(){
 
 function docker_compose_up(){
     file=$1
-    docker-compose -f "$TESTS_DIR/$file" up -d
+    docker-compose -f "$TESTS_DIR/$file" up -d -V
 }
 
 function docker_compose_down(){
@@ -44,7 +45,6 @@ function docker_compose_exec(){
     docker-compose -f "$TESTS_DIR/$file" exec -T "$service" "$command"
 }
 
-
 function health_check(){
     url=$1
     echo "checking $url"
@@ -55,9 +55,9 @@ function health_check(){
 }
 
 function create_docker_network(){
-    docker network rm $SONAR_DOCKER_NETWORK_NAME || true
-    docker network create -d bridge --attachable $SONAR_DOCKER_NETWORK_NAME || true
-    docker network ls | grep $SONAR_DOCKER_NETWORK_NAME
+    docker network rm "$SONAR_DOCKER_NETWORK_NAME" || true
+    docker network create -d bridge --attachable "$SONAR_DOCKER_NETWORK_NAME" || true
+    docker network ls | grep "$SONAR_DOCKER_NETWORK_NAME"
 }
 
 function destroy_docker_network(){

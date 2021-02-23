@@ -6,8 +6,6 @@ on:
     tags:
       - 'v*'
 
-    branches-ignore:
-      - '**'
 jobs:
 
   test:
