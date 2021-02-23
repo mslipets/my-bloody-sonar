@@ -45,8 +45,7 @@ jobs:
         with:
           push: false
           tags: mslipets/my-bloody-sonar:${{ github.ref }}
-          build-args:
-            - 'FROM_TAG=${{ github.ref }}-${{ matrix.version }}'
+          build-args: FROM_TAG=${{ github.ref }}-${{ matrix.version }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
@@ -73,8 +72,7 @@ jobs:
         with:
           push: false
           tags: mslipets/my-bloody-sonar:latest
-          build-args:
-            - 'FROM_TAG=${{ matrix.version }}'
+          build-args: FROM_TAG=${{ matrix.version }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
