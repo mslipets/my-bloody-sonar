@@ -66,8 +66,8 @@ jobs:
         release: [lts, community, developer, enterprise]
         version: [7.9.5, 8.6.1]
         exclude:
-          - release: lts
-            version: 8.6.1
+          - release: [community, developer, enterprise]
+            version: [7.9.5]
     if: github.event.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
