@@ -60,7 +60,7 @@ docker pull mslipets/my-bloody-sonar:developer
 ```
 get the latest [enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-enterprise, 8.6-enterprise, 8-enterprise, enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
-docker pull mslipets/my-bloody-sonar:[enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+docker pull mslipets/my-bloody-sonar:enterprise
 ```
 get a concrete 8.6.1-developer release
 ```bash

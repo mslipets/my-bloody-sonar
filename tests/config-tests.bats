@@ -37,5 +37,5 @@ function curl_test(){
 @test "<<< teardown config tests env" {
     docker_compose_down $COMPOSE_FILE
     destroy_docker_network
-    rm -rf $TESTS_HOST_CONF_DIR
+    rm -rf "$TESTS_HOST_CONF_DIR"
 }

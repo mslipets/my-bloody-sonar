@@ -12,22 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [lts, community, developer, enterprise]
+        release: [lts, community, developer, enterprise]
+        version: [7.9.5, 8.6.1]
+        exclude:
+          - release: lts
+            version: [ 8.6.1 ]
+
     steps:
       - name: Setup BATS
         uses: mig4/setup-bats@v1
 
       - uses: actions/checkout@v2
 
-      - name: test test-${{ matrix.version }}
-        run: make test VERSION=${{ matrix.version }}
+      - name: test test-${{ matrix.version }}-${{ matrix.release }}
+        run: make test VERSION=${{ matrix.version }}-${{ matrix.release }}
 
   deploy-tags:
     needs: test
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [lts, community, developer, enterprise]
+        release: [lts, community, developer, enterprise]
+        version: [7.9.5, 8.6.1]
+        exclude:
+          - release: lts
+            version: [ 8.6.1 ]
 
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
@@ -55,7 +64,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [lts, community, developer, enterprise]
+        release: [lts, community, developer, enterprise]
+        version: [7.9.5, 8.6.1]
+        exclude:
+          - release: lts
+            version: [ 8.6.1 ]
+
     if: github.event.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
