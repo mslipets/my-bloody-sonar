@@ -12,13 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        release: [lts, community, developer, enterprise]
-        version: [7.9.5, 8.6.1]
-        exclude:
+        release: [community, developer, enterprise]
+        version: [ 8.6.1 ]
+        include:
           - release: lts
-            version: 8.6.1
-          - release: [community, developer, enterprise]
-            version: 7.9.5
+            version: []
 
     steps:
       - name: Setup BATS
