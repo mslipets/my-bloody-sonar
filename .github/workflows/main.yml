@@ -17,6 +17,8 @@ jobs:
         exclude:
           - release: lts
             version: 8.6.1
+          - release: [community, developer, enterprise]
+            version: 7.9.5
 
     steps:
       - name: Setup BATS
@@ -32,11 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        release: [lts, community, developer, enterprise]
-        version: [7.9.5, 8.6.1]
-        exclude:
+        release: [community, developer, enterprise]
+        version: [ 8.6.1 ]
+        include:
           - release: lts
-            version: 8.6.1
+            version: 7.9.5
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v2
@@ -63,12 +65,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        release: [lts, community, developer, enterprise]
-        version: [7.9.5, 8.6.1]
-        exclude:
+        release: [community, developer, enterprise]
+        version: [ 8.6.1 ]
+        include:
           - release: lts
-            version: 8.6.1
-          - release: [community, developer, enterprise]
             version: 7.9.5
     if: github.event.ref == 'refs/heads/master'
     steps:
