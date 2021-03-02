@@ -44,7 +44,7 @@ jobs:
         uses: xom9ikk/split@v1
         id: split
         with:
-          string: matrix.version
+          string: ${{ matrix.version }}
           separator: v
           limit: -1
 
