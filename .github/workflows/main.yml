@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        release: [community, developer, enterprise]
-        version: [ 8.6.1 ]
+#        release: [community, developer, enterprise]
+#        version: [ 8.6.1 ]
         include:
           - release: lts
             version:
@@ -33,12 +33,13 @@ jobs:
     strategy:
       matrix:
         release: [community, developer, enterprise]
-        version: ${{ github.ref }}
+        version: [${{ github.ref }}]
         include:
           - release: lts
             version:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
+
       - name: Split version tag
         uses: xom9ikk/split@v1
         id: split
@@ -66,7 +67,7 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 #
-#  publish-versions:
+#  publish-releases:
 #    needs: test
 #    runs-on: ubuntu-latest
 #    strategy:
