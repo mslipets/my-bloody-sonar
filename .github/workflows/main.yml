@@ -61,7 +61,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: false
-          tags: ${{ steps.tagsplit.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.tagsplit.outputs._1, matrix.release) || }}, mslipets/my-bloody-sonar:${{ matrix.release }}
+          tags: ${{ steps.tagsplit.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.tagsplit.outputs._1, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
           build-args: FROM_TAG=${{ steps.tagsplit.outputs._1 != '' && format('{0}-{1}', steps.tagsplit.outputs._1, matrix.release) || matrix.release }}
 
       - name: Image digest
