@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: test test-${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
-        run: make test VERSION=${{ matrix.version != "" && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
+        run: make test VERSION=${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
 
   deploy-tags:
     needs: test
