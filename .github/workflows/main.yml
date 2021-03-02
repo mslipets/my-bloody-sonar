@@ -32,8 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        release: [community, developer, enterprise]
-        version: [ ${{ github.ref }} ]
+        release: [ community, developer, enterprise ]
+        version: [ github.ref ]
         include:
           - release: lts
             version:
