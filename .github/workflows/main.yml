@@ -24,8 +24,8 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: test test-${{ matrix.version }}-${{ matrix.release }}
-        run: make test VERSION=${{ matrix.version }}-${{ matrix.release }}
+      - name: test test-${{ join( [ matrix.version, matrix.release], '-' ) }}
+        run: make test VERSION=${{ join( [ matrix.version, matrix.release], '-' ) }}
 
   deploy-tags:
     needs: test
