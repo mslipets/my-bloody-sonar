@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         release: [community, developer, enterprise]
-        version: [${{ github.ref }}]
+        version: [ ${{ github.ref }} ]
         include:
           - release: lts
             version:
