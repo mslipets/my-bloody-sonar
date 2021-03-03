@@ -66,7 +66,7 @@ jobs:
         include:
           - release: lts
             version:
-    if: startsWith(github.ref, 'refs/tags/v') || github.event.ref == 'refs/heads/master'
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
 
