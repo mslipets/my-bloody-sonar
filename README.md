@@ -1,7 +1,7 @@
 # My Bloody Sonar - An opinionated SonarQube Docker Image
 Self Configured SonarQube Docker image based on Official SonarSource Images
 <br>
-(heavily influenced by [My Bloody SonarQube](https://github.com/mslipets/my-bloody-sonar) and [telia-oss/terraform-aws-sonarqube](https://github.com/telia-oss/terraform-aws-sonarqube))
+(heavily influenced by [My Bloody Jenkins](https://github.com/odavid/my-bloody-jenkins) and [telia-oss/terraform-aws-sonarqube](https://github.com/telia-oss/terraform-aws-sonarqube))
 
 ## What's in the Box?
 *My Bloody Sonar* is a re-distribution of the [Official Docker image for SonarQube](https://hub.docker.com/_/sonarqube) bundled with most popular plugins and
