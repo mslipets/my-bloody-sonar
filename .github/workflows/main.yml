@@ -24,14 +24,14 @@ jobs:
         
       - name: Split version tag
         uses: xom9ikk/split@v1
-        id: tagsplit
+        id: version
         with:
-          string: "_${{ steps.previoustag.outputs.tag }}"
+          string: ${{ steps.previoustag.outputs.tag }}
           separator: v
           limit: -1
           
       - name: 'test out'
-        run: echo "${{ steps.previoustag.outputs.tag }} -> ${{ steps.tagsplit.outputs._0 }} -> ${{ steps.tagsplit.outputs._1 }}"
+        run: echo "${{ steps.previoustag.outputs.tag }} -> ${{ steps.version.outputs._0 }} -> ${{ steps.version.outputs._1 }}"
 
   test:
     needs: getversion
@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         release: [community, developer, enterprise]
-        version: [ "${{ needs.getversion.steps.tagsplit.outputs._1 }}" ]
+        version: [ "${{ needs.getversion.steps.version.outputs._1 }}" ]
         include:
           - release: lts
             version:
@@ -68,7 +68,7 @@ jobs:
 
       - name: Split version tag
         uses: xom9ikk/split@v1
-        id: tagsplit
+        id: version
         with:
           string: ${{ matrix.version }}
           separator: v
@@ -87,8 +87,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: false
-          tags: ${{ steps.tagsplit.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.tagsplit.outputs._1, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
-          build-args: FROM_TAG=${{ steps.tagsplit.outputs._1 != '' && format('{0}-{1}', steps.tagsplit.outputs._1, matrix.release) || matrix.release }}
+          tags: ${{ steps.version.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.version.outputs._1, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
+          build-args: FROM_TAG=${{ steps.version.outputs._1 != '' && format('{0}-{1}', steps.version.outputs._1, matrix.release) || matrix.release }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
@@ -108,7 +108,7 @@ jobs:
 #
 #      - name: Split version tag
 #        uses: xom9ikk/split@v1
-#        id: tagsplit
+#        id: version
 #        with:
 #          string: ${{ matrix.version }}
 #          separator: v
@@ -127,8 +127,8 @@ jobs:
 #        uses: docker/build-push-action@v2
 #        with:
 #          push: false
-#          tags: ${{ steps.tagsplit.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.tagsplit.outputs._1, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
-#          build-args: FROM_TAG=${{ steps.tagsplit.outputs._1 != '' && format('{0}-{1}', steps.tagsplit.outputs._1, matrix.release) || matrix.release }}
+#          tags: ${{ steps.version.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.version.outputs._1, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
+#          build-args: FROM_TAG=${{ steps.version.outputs._1 != '' && format('{0}-{1}', steps.version.outputs._1, matrix.release) || matrix.release }}
 #
 #      - name: Image digest
 #        run: echo ${{ steps.docker_build.outputs.digest }}
