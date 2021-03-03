@@ -50,7 +50,7 @@ get the [LTS](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_
 ```bash
 docker pull mslipets/my-bloody-sonar:lts
 ```
-get the [latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) [community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-community, 8.6-community, 8-community, community, latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+get the [latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) [community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-community, community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
 docker pull mslipets/my-bloody-sonar:latest
 ```
