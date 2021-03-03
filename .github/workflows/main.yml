@@ -43,9 +43,6 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs._1 }}
 
-    outputs:
-      version: ${{ steps.version.outputs._1 }}
-
   test:
     needs: getversion
     runs-on: ubuntu-latest
