@@ -24,12 +24,12 @@ jobs:
         uses: xom9ikk/split@v1
         id: tagsplit
         with:
-          string: ${{ steps.previoustag.tag }}
+          string: -${{ steps.previoustag.tag }}
           separator: v
           limit: -1
           
       - name: 'test out'
-        run: echo "${{ steps.previoustag.outputs.tag }} -> ${{ steps.tagsplit.outputs._1 }}"
+        run: echo "${{ steps.previoustag.outputs.tag }} -> ${{ steps.tagsplit.outputs._0 }} - ${{ steps.tagsplit.outputs._1 }}"
 
   test:
     needs: getversion
@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         release: [community, developer, enterprise]
-        version: [ "${{ needs.getversion.steps.previoustag.outputs.tag }}" ]
+        version: [ "${{ needs.getversion.steps.tagsplit.outputs._1 }}" ]
         include:
           - release: lts
             version:
