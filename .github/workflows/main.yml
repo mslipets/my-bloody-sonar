@@ -26,7 +26,7 @@ jobs:
         uses: xom9ikk/split@v1
         id: tagsplit
         with:
-          string: "_${{ steps.previoustag.tag }}"
+          string: "_${{ steps.previoustag.outputs.tag }}"
           separator: v
           limit: -1
           
