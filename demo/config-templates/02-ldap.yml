@@ -1,0 +1,13 @@
+# INFO alternative option is to use Environment variables, see docker-compose.yml
+# https://docs.sonarqube.org/latest/instance-administration/delegated-auth/#header-5
+ldap:
+  url: ldap://ldap:389
+  bindPassword: readonly
+  bindDn: cn=readonly,dc=example,dc=org
+  realm: example.org
+  user:
+    baseDn: cn=users,dc=example,dc=org
+    emailAttribute: mail
+    realNameAttribute: cn
+  group:
+    baseDn: cn=groups,dc=example,dc=org

@@ -9,11 +9,15 @@ ability to configure most aspects of SonarQube from a **simple** and **single so
 
 The image can get the configuration from several data sources such as: File, S3, Environment Variable, HTTP, Kubernetes ConfigMap and Kubernetes Secret.
 
-//TODO: The image supports "Watching" configuration changes and applying them immediately without restarting SonarQube.
+The image supports "Watching" configuration changes and applying them immediately without restarting SonarQube.
 
 ## Features
 * Configuration Coverage:
-//TODO:  * Authorization
+  * pretty all settings under sonar.* properties namespace
+  * ldap.* properties, although full application of it might require a restart of web engine.<br> 
+    (therefore [Environment variables](https://docs.sonarqube.org/latest/setup/environment-variables/#header-4) is recommended)
+    
+
 
 
 ## Why Use the term "Bloody"?
@@ -21,41 +25,45 @@ As [original quote](https://github.com/mslipets/my-bloody-sonar#why-use-the-term
 "The term "My Bloody SonarQube" came from the fact that I tried to put all my "battle" experience, (i.e. blood, sweat and tears) within the image.
 I just thought it is a "catchy" name for this kind of a repository." (c) [Ohad David](https://github.com/odavid)
 <br>
-I thought this epithets is also pretty suitable for this custom SonarQube image.
+I thought these epithets is also pretty suitable for this custom SonarQube image.
 
-## Demo
-//TODO
+## Demo and Usage Example
 
-## Some Usage Examples
-//TODO
+A [demo](demo) can be found [here](demo/README.md)
 
 
 ## Releases
 Docker Images are pushed to [Docker Hub](https://hub.docker.com/r/mslipets/my-bloody-sonar/)
 
-Each release is a git tag v$VERSION-$INCREMENT where:
+Each release is a docker tag v$VERSION-$RELEASE where:
 
-* VERSION is the SonarQube version
-* INCREMENT is a number representing that representing the release contents (i.e additional configuration options, bugs in configuration, plugins, etc...)
+* VERSION is the SonarQube app version
+* RELEASE is a release  e.g. lts, community, developer, enterprise
 
 For each git tag, there following tags will be created:
-* $VERSION-$INCREMENT - one to one relationship with git tag
-* $VERSION - latest release for that community version
-* lts - represents the latest release
+* $VERSION-$RELEASE - one to one relationship with git tag
+* $RELEASE - `latest` version for that release variant.
+* lts - represents the latest lts release
 
 
-Each master commit, will be tagged as latest
-
+get the [LTS](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) release (openjdk:11-jre-slim) alternative tags: [lts](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
-# get the LTS release (openjdk:11-jre-slim) alternative tags: 7.9.5-community, 7.9-community, lts
 docker pull mslipets/my-bloody-sonar:lts
-# get the latest community version (alpine) alternative tags: 8.6.1-community, 8.6-community, 8-community, community, latest
-docker pull mslipets/my-bloody-sonar:latest #
-# get the latest developer version (alpine) alternative tags: 8.6.1-developer, 8.6-developer, 8-developer, developer
+```
+get the [latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) [community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-community, 8.6-community, 8-community, community, latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+```bash
+docker pull mslipets/my-bloody-sonar:latest
+```
+get the latest [developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-developer, developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+```bash
 docker pull mslipets/my-bloody-sonar:developer
-# get the latest enterprise version (alpine) alternative tags: 8.6.1-enterprise, 8.6-enterprise, 8-enterprise, enterprise
+```
+get the latest [enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-enterprise, enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+```bash
 docker pull mslipets/my-bloody-sonar:enterprise
-# get a concrete 8.6.1-developer release
+```
+get a concrete 8.6.1-developer release
+```bash
 docker pull mslipets/my-bloody-sonar:8.6.1-developer
 
 ```
@@ -66,7 +74,7 @@ The following Environment variables are supported
 Besides all [Environment variables](https://docs.sonarqube.org/latest/setup/environment-variables/) supported by [Official Docker image for SonarQube](https://hub.docker.com/_/sonarqube)
 
 
-* `SONAR_ADMIN_USERNAME` - (***mandatory***) Represents the name of the admin user. If LDAP/SAML is your choice of authentication, then this should be a valid LDAP user id. If using own Database, then you also need to pass the password of this user within the [configuration](#configuration-reference).
+* `SONAR_ADMIN_USERNAME` - (***mandatory***) Represents the name of the admin user. If LDAP/SAML is your choice of authentication, then this should be a valid IDP user id. If using own Database, then you also need to pass the password of this user within the [configuration](#configuration-reference).
 
 > Bare minimum to be set is:<br>
 `SONAR_ADMIN_USERNAME`<br>
@@ -88,25 +96,30 @@ Besides all [Environment variables](https://docs.sonarqube.org/latest/setup/envi
   * `file://<filepath>` - a file path (should be mapped as volume) - can be a file, folder or glob expression (e.g. `file:///dir/filename` or `file:///dir` or `file:///dir/*.yml`)
   * `http[s]://<path>` - an http endpoint
 
-> Note: If multiple URLs are passed or the file url contains a dir name or a glob expression, all yaml files are being deep merged top to bottom. This behavior enables to separate the configuration into different files or override default configuration.
+> Note: If multiple URLs are passed, or the file url contains a dir name or a glob expression, all yaml files are being deep merged top to bottom. This behavior enables to separate the configuration into different files or override default configuration.
 
 
 * `SONAR_ENV_CONFIG_YML_URL_DISABLE_WATCH` - If equals to 'true', then the configuration file will be fetched only at startup, but won't be watched. Default 'false'
 
 * `SONAR_ENV_CONFIG_YML_URL_POLLING` - polling interval in seconds to check if file changed in s3. Default (30)
 
-//TODO: * `SONAR_ENV_PLUGINS` - Ability to define comma separated list of additional plugins to install before starting up. See [plugin-version-format](https://github.com/SonarQubeci/docker#plugin-version-format).
+//TODO: * `SONAR_ENV_PLUGINS` - Ability to define comma separated list of additional plugins to install before starting up.
 > This is option is not recommended, but sometimes it is useful to run the container without creating an inherited image.
 
 
 ## Configuration Reference
-The configuration is divided into main configuration sections. Each section is responsible for a specific aspect of SonarQube configuration.
+The configuration is provided in yaml format, 
+each node with value is corresponds to sonarqube property 
+(can be lookup on gui) or in sonar.properties file.
+
+Each key is responsible for a specific aspect of SonarQube configuration.
 
 
+## [Credits](CREDITS.md)
 
-
-
-
+  - [Ohad David](https://github.com/odavid) for [My Bloody Jenkins](https://github.com/odavid/my-bloody-jenkins)
+  - [Telia OSS](https://github.com/telia-oss) for [aws-env](https://github.com/telia-oss/aws-env) and [terraform-aws-sonarqube](https://github.com/telia-oss/terraform-aws-sonarqube)
+  - [SonarSource](https://github.com/SonarSource) for original [docker-sonarqube](https://github.com/SonarSource/docker-sonarqube)
 
 
 ## License

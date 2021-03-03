@@ -1,0 +1,8 @@
+sonar:
+  core:
+      serverBaseURL: "http://localhost:9000"
+  lf:
+    logoUrl: "https://i.ytimg.com/vi/UN-NgihqbLM/hqdefault.jpg"
+    aboutText: "My Bloody Sonar 'About Text' example."
+  dbcleaner:
+    daysBeforeDeletingInactiveBranchesAndPRs: 30
