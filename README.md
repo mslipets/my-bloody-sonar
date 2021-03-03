@@ -14,7 +14,7 @@ The image supports "Watching" configuration changes and applying them immediatel
 ## Features
 * Configuration Coverage:
   * pretty all settings under sonar.* properties namespace
-  * ldap.* properties, although full application of it might require a restart of web engine. 
+  * ldap.* properties, although full application of it might require a restart of web engine.<br> 
     (therefore [Environment variables](https://docs.sonarqube.org/latest/setup/environment-variables/#header-4) is recommended)
     
 
