@@ -35,18 +35,18 @@ A [demo](demo) can be found [here](demo/README.md)
 ## Releases
 Docker Images are pushed to [Docker Hub](https://hub.docker.com/r/mslipets/my-bloody-sonar/)
 
-Each release is a git tag v$VERSION-$INCREMENT where:
+Each release is a docker tag v$VERSION-$RELEASE where:
 
-* VERSION is the SonarQube version
-* INCREMENT is a number that representing the release contents (i.e additional configuration options, bugs in configuration, plugins, etc...)
+* VERSION is the SonarQube app version
+* RELEASE is a release  e.g. lts, community, developer, enterprise
 
 For each git tag, there following tags will be created:
-* $VERSION-$INCREMENT - one to one relationship with git tag
-* $VERSION - latest release for that community version
-* lts - represents the latest release
+* $VERSION-$RELEASE - one to one relationship with git tag
+* $RELEASE - `latest` version for that release variant.
+* lts - represents the latest lts release
 
 
-get the [LTS](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) release (openjdk:11-jre-slim) alternative tags: [7.9.5-community, 7.9-community, lts](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+get the [LTS](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) release (openjdk:11-jre-slim) alternative tags: [lts](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
 docker pull mslipets/my-bloody-sonar:lts
 ```
@@ -54,11 +54,11 @@ get the [latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=la
 ```bash
 docker pull mslipets/my-bloody-sonar:latest
 ```
-get the latest [developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-developer, 8.6-developer, 8-developer, developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+get the latest [developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-developer, developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
 docker pull mslipets/my-bloody-sonar:developer
 ```
-get the latest [enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-enterprise, 8.6-enterprise, 8-enterprise, enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+get the latest [enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-enterprise, enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
 docker pull mslipets/my-bloody-sonar:enterprise
 ```
@@ -103,14 +103,14 @@ Besides all [Environment variables](https://docs.sonarqube.org/latest/setup/envi
 
 * `SONAR_ENV_CONFIG_YML_URL_POLLING` - polling interval in seconds to check if file changed in s3. Default (30)
 
-//TODO: * `SONAR_ENV_PLUGINS` - Ability to define comma separated list of additional plugins to install before starting up. See [plugin-version-format](https://github.com/SonarQubeci/docker#plugin-version-format).
+//TODO: * `SONAR_ENV_PLUGINS` - Ability to define comma separated list of additional plugins to install before starting up.
 > This is option is not recommended, but sometimes it is useful to run the container without creating an inherited image.
 
 
 ## Configuration Reference
 The configuration is provided in yaml format, 
 each node with value is corresponds to sonarqube property 
-(can be lookup on gui) or in sonar.properies file.
+(can be lookup on gui) or in sonar.properties file.
 
 Each key is responsible for a specific aspect of SonarQube configuration.
 
