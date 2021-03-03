@@ -29,7 +29,7 @@ jobs:
           string: ${{ steps.previoustag.outputs.tag }}
           separator: v
           limit: -1
-          
+
       - name: 'test out'
         run: echo "${{ steps.previoustag.outputs.tag }} -> ${{ steps.version.outputs._0 }} -> ${{ steps.version.outputs._1 }}"
 
@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         release: [community, developer, enterprise]
-        version: [ "${{ needs.getversion.steps.version.outputs._1 }}" ]
+        version: [ "${{ needs.getversion.steps.version.outputs._1 }}",  "${{ needs.getversion.steps.previoustag.outputs.tag }}" ]
         include:
           - release: lts
             version:
