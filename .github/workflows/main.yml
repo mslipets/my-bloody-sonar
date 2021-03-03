@@ -34,7 +34,7 @@ jobs:
           limit: -1
 
     outputs:
-      version: ${{ matrix.version }}
+      version: ${{ steps.version.outputs._1 }}
 
   test:
     needs: getversion
