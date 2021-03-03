@@ -38,8 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        release: [community, developer, enterprise]
-        version: [ "${{ jobs.test.needs.getversion.steps.version.outputs._1 }}" ]
+        release: [ community, developer, enterprise ]
+        version: ["${{needs.getversion.steps.version.outputs._1}}"]
         include:
           - release: lts
             version:
