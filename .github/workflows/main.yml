@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         release: [community, developer, enterprise]
-        version: [ "${{ needs.getversion.steps.version.outputs._1 }}",  "${{ needs.getversion.steps.previoustag.outputs.tag }}" ]
+        version: [ "${{ jobs.test.needs.getversion.steps.version.outputs._1 }}" ]
         include:
           - release: lts
             version:
