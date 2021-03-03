@@ -3,11 +3,14 @@ on:
   push:
     branches:
       - develop
+      - feature/*
     tags:
       - 'v*'
   pull_request:
     branches:
       - main
+env:
+  push_to_dockerhub: false
 
 jobs:
 
@@ -30,11 +33,8 @@ jobs:
           separator: v
           limit: -1
 
-      - name: 'test out'
-        run: echo "${{ steps.previoustag.outputs.tag }} -> ${{ steps.version.outputs._0 }} -> ${{ steps.version.outputs._1 }}"
-
     outputs:
-      version: ${{ steps.version.outputs._1 }}
+      version: ${{ matrix.version }}
 
   test:
     needs: getversion
@@ -56,27 +56,18 @@ jobs:
       - name: test test-${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
         run: make test VERSION=${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
 
-  publish-tags:
-    needs: test
+  publish-images:
+    needs: [ test, getversion ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         release: [ community, developer, enterprise ]
-        version:  [ "${{ github.ref }}" ]
+        version: [ "${{ needs.getversion.outputs.version }}" ]
         include:
           - release: lts
             version:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.ref == 'refs/heads/master'
     steps:
-
-      - name: Split version tag
-        uses: xom9ikk/split@v1
-        id: version
-        with:
-          string: ${{ matrix.version }}
-          separator: v
-          limit: -1
-
       - uses: actions/checkout@v2
 
       - name: Login to DockerHub
@@ -89,49 +80,9 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          push: false
-          tags: ${{ steps.version.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.version.outputs._1, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
-          build-args: FROM_TAG=${{ steps.version.outputs._1 != '' && format('{0}-{1}', steps.version.outputs._1, matrix.release) || matrix.release }}
+          push: ${{ env.push_to_dockerhub }}
+          tags: ${{ matrix.version != '' && format('mslipets/my-bloody-sonar:{0}-{1}', matrix.version, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
+          build-args: FROM_TAG=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-#
-#  publish-releases:
-#    needs: test, getversion
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        release: [community, developer, enterprise]
-#        version: [ "${{ needs.getversion.steps.previoustag.outputs.tag }}" ]
-#        include:
-#          - release: lts
-#            version:
-#    if: github.event.ref == 'refs/heads/master'
-#    steps:
-#
-#      - name: Split version tag
-#        uses: xom9ikk/split@v1
-#        id: version
-#        with:
-#          string: ${{ matrix.version }}
-#          separator: v
-#          limit: -1
-#
-#      - uses: actions/checkout@v2
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Build and push
-#        id: docker_build
-#        uses: docker/build-push-action@v2
-#        with:
-#          push: false
-#          tags: ${{ steps.version.outputs._1 != '' && format('mslipets/my-bloody-sonar:{0}-{1}', steps.version.outputs._1, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
-#          build-args: FROM_TAG=${{ steps.version.outputs._1 != '' && format('{0}-{1}', steps.version.outputs._1, matrix.release) || matrix.release }}
-#
-#      - name: Image digest
-#        run: echo ${{ steps.docker_build.outputs.digest }}
