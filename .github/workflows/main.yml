@@ -4,11 +4,15 @@ on:
     branches:
       - develop
       - feature/*
+      - main
     tags:
       - 'v*'
   pull_request:
     branches:
       - main
+  release:
+      types:
+        - created
 env:
   push_to_dockerhub: true
 
@@ -32,6 +36,9 @@ jobs:
           string: ${{ steps.previoustag.outputs.tag }}
           separator: v
           limit: -1
+
+      - name: 'conditions check'
+        run: echo ${{ github.ref }}
 
     outputs:
       version: ${{ steps.version.outputs._1 }}
@@ -66,7 +73,7 @@ jobs:
         include:
           - release: lts
             version:
-    if: startsWith(github.ref, 'refs/tags/v') || github.event.ref == 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
 
