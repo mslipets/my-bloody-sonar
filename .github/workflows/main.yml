@@ -94,10 +94,15 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-      - name: Update repo description
-        uses: peter-evans/dockerhub-description@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: mslipets/my-bloody-sonar
-          short-description: 'Self Configured SonarQube Docker image based on Official SonarSource Images'
+#      Disabled due to https://github.com/docker/hub-feedback/issues/1927
+#      untill resolution to https://github.com/docker/roadmap/issues/115 implemented.
+#      - name: Update repo description
+#        uses: christian-korneck/update-container-description-action@v1
+#        env:
+#          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+#          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
+#        with:
+#          destination_container_repo: mslipets/my-bloody-sonar
+#          provider: dockerhub
+#          short_description: 'Self Configured SonarQube Docker image based on Official SonarSource Images'
+#          readme_file: 'README.md'
