@@ -29,7 +29,7 @@ I thought these epithets is also pretty suitable for this custom SonarQube image
 
 ## Demo and Usage Example
 
-A [demo](demo) can be found [here](demo/README.md)
+A [demo](https://github.com/mslipets/my-bloody-sonar/demo) can be found [here](https://github.com/mslipets/my-bloody-sonar/demo/README.md)
 
 
 ## Releases
@@ -50,21 +50,21 @@ get the [LTS](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_
 ```bash
 docker pull mslipets/my-bloody-sonar:lts
 ```
-get the [latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) [community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-community, community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+get the [latest](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) [community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.7.0-community, community](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
 docker pull mslipets/my-bloody-sonar:latest
 ```
-get the latest [developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-developer, developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+get the latest [developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.7.0-developer, developer](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
 docker pull mslipets/my-bloody-sonar:developer
 ```
-get the latest [enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.6.1-enterprise, enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
+get the latest [enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated) version (alpine) alternative tags: [8.7.0-enterprise, enterprise](https://hub.docker.com/_/sonarqube/?tab=tags&page=1&ordering=last_updated)
 ```bash
 docker pull mslipets/my-bloody-sonar:enterprise
 ```
-get a concrete 8.6.1-developer release
+get a concrete 8.7.0-developer release
 ```bash
-docker pull mslipets/my-bloody-sonar:8.6.1-developer
+docker pull mslipets/my-bloody-sonar:8.7.0-developer
 
 ```
 
