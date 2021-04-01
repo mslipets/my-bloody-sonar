@@ -26,19 +26,19 @@ jobs:
           fetch-depth: 0
 
       - name: 'Get Previous tag'
-        id: previoustag
+        id: latesttag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
         
       - name: Split version tag
         uses: xom9ikk/split@v1
         id: version
         with:
-          string: ${{ steps.previoustag.outputs.tag }}
+          string: ${{ steps.latesttag.outputs.tag }}
           separator: v
           limit: -1
 
       - name: 'conditions check'
-        run: echo ${{ github.ref }}
+        run: echo ${{ steps.latesttag.outputs.tag }}
 
     outputs:
       version: ${{ steps.version.outputs._1 }}
