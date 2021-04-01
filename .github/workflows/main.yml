@@ -27,10 +27,10 @@ jobs:
 
       - name: 'Get Previous tag'
         id: latesttag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: WyriHaximus/github-action-get-previous-tag@v1.0.1
         
       - name: Split version tag
-        uses: xom9ikk/split@v1.0.1
+        uses: xom9ikk/split@v1
         id: version
         with:
           string: ${{ steps.latesttag.outputs.tag }}
