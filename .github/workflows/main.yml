@@ -21,13 +21,13 @@ jobs:
   getversion:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
       - name: 'Get Previous tag'
         id: latesttag
-        uses: WyriHaximus/github-action-get-previous-tag@v1.0.1
+        uses: WyriHaximus/github-action-get-previous-tag@v1
         
       - name: Split version tag
         uses: xom9ikk/split@v1
