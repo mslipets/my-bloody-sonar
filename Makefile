@@ -22,6 +22,6 @@ test: build
 #	git diff plugins.txt | grep  '^+' | sed 's|+||' | grep -v + | awk -F \: '{print "* ["$$1":"$$2"](https://plugins.jenkins.io/" $$1 ")"}'
 
 release:
-	$(eval NEW_INCREMENT := $(shell expr `git describe --tags --abbrev=0 | cut -d'-' -f2` + 1))
-	git tag v$(VERSION)-$(NEW_INCREMENT)
-	git push origin v$(VERSION)-$(NEW_INCREMENT)
+	echo v$(VERSION)
+	git tag v$(VERSION)
+	git push origin v$(VERSION)
