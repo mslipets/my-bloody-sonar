@@ -34,7 +34,7 @@ jobs:
       - name: 'CleanUp version'
         id: version
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
-        run: echo ::set-output name=version::${{ steps.latestTag.outputs.tag#v }}
+        run: echo ::set-output name=version::${ steps.latestTag.outputs.tag#v }
 
       - name: 'conditions check'
         run: echo ${{ steps.latestTag.outputs.tag }}
