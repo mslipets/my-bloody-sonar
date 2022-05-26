@@ -27,23 +27,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Get Previous tag'
+      - name: 'Get Current tag'
         id: latestTag
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
         
       - name: 'CleanUp version'
-        uses: xom9ikk/split@v1
         id: version
-        with:
-          string: ${{ steps.latestTag.outputs.tag }}
-          separator: v
-          limit: -1
+        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
+        run: echo ::set-output name=version::${{ steps.latestTag.outputs.tag#v }}
 
       - name: 'conditions check'
         run: echo ${{ steps.latestTag.outputs.tag }}
 
     outputs:
-      version: ${{ steps.version.outputs._1 }}
+      version: ${{ steps.version.outputs.version }}
 
   test:
     needs: getVersion
