@@ -27,17 +27,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Get Current tag'
-        id: latestTag
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: 'Get latest tag'
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+#        if: ${{ steps.release-label.outputs.level != null }}
+        with:
+          semver_only: true
         
       - name: 'CleanUp version'
         id: version
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
-        run: echo ::set-output name=version::${ steps.latestTag.outputs.tag#v }
+        run: echo ::set-output name=version::${ steps.get-latest-tag.outputs.tag#v }
 
       - name: 'conditions check'
-        run: echo ${{ steps.latestTag.outputs.tag }}
+        run: echo ${{ steps.get-latest-tag.outputs.tag }}
 
     outputs:
       version: ${{ steps.version.outputs.version }}
