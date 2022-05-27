@@ -1,4 +1,4 @@
-name: main
+name: my-bloody-sonar
 on:
   push:
     branches:
@@ -7,6 +7,8 @@ on:
       - main
     tags:
       - 'v*'
+    paths-ignore:
+      - README.md
   pull_request:
     branches:
       - main
@@ -18,38 +20,38 @@ env:
 
 jobs:
 
-  getversion:
+  getVersion:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: 'Get Previous tag'
-        id: latesttag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-        
-      - name: Split version tag
-        uses: xom9ikk/split@v1
-        id: version
+      - name: 'Get latest tag'
+        uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+#        if: ${{ steps.release-label.outputs.level != null }}
         with:
-          string: ${{ steps.latesttag.outputs.tag }}
-          separator: v
-          limit: -1
+          semver_only: true
+        
+      - name: 'CleanUp version'
+        id: version
+        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
+        run: echo ::set-output name=version::${ steps.get-latest-tag.outputs.tag#v }
 
       - name: 'conditions check'
-        run: echo ${{ steps.latesttag.outputs.tag }}
+        run: echo ${{ steps.get-latest-tag.outputs.tag }}
 
     outputs:
-      version: ${{ steps.version.outputs._1 }}
+      version: ${{ steps.version.outputs.version }}
 
   test:
-    needs: getversion
+    needs: getVersion
     runs-on: ubuntu-latest
     strategy:
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ "${{ needs.getversion.outputs.version }}" ]
+        version: [ "${{ needs.getVersion.outputs.version }}" ]
         include:
           - release: lts
             version:
@@ -64,12 +66,12 @@ jobs:
         run: make test VERSION=${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
 
   publish-images:
-    needs: [ test, getversion ]
+    needs: [ test, getVersion ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ "${{ needs.getversion.outputs.version }}" ]
+        version: [ "${{ needs.getVersion.outputs.version }}" ]
         include:
           - release: lts
             version:
@@ -77,18 +79,39 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Login to DockerHub
+      - name: Login to Packages Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to Docker Hub registry
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            ghcr.io/mslipets/my-bloody-sonar
+            mslipets/my-bloody-sonar
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=raw,value=${{format('{0}-{1}', matrix.version, matrix.release)}}
+            type=raw,value=${{ matrix.release }}
+            type=sha
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
 
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: ${{ env.push_to_dockerhub }}
-          tags: ${{ matrix.version != '' && format('mslipets/my-bloody-sonar:{0}-{1}', matrix.version, matrix.release) || '' }}, mslipets/my-bloody-sonar:${{ matrix.release }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           build-args: FROM_TAG=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
 
       - name: Image digest

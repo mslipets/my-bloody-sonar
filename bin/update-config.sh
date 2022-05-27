@@ -53,7 +53,7 @@ wait_for_service() {
     health=$(curl -sL "${sonar_url}/api/system/status" | jq '.status')
     debug "web service responds $health"
   done
-  debug "sonar web service is up"
+  log "sonar web service is up"
 }
 
 get_auth() {
