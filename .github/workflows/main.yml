@@ -13,8 +13,8 @@ on:
     branches:
       - main
   release:
-      types:
-        - created
+    types: [published]
+
 env:
   push_to_registry: true
 
@@ -30,7 +30,7 @@ jobs:
       - name: Get tag
         id: tag
         uses: dawidd6/action-get-tag@v1
-        if: ${{ github.event.release.published  == true }}
+#        if: ${{ github.event.release.published  == true }}
         with:
           # Optionally strip `v` prefix
           strip_v: true
@@ -83,7 +83,7 @@ jobs:
         include:
           - release: lts
             version:
-    if: ${{ github.event.release.published  == true }}
+#    if: ${{ github.event.release.published == true }}
     steps:
       - uses: actions/checkout@v2
 
