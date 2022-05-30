@@ -30,7 +30,7 @@ jobs:
       - name: Get tag
         id: tag
         uses: dawidd6/action-get-tag@v1
-#        if: ${{ github.event.release.published  == true }}
+        if: ${{ github.event.release.published  == true }}
         with:
           # Optionally strip `v` prefix
           strip_v: true
