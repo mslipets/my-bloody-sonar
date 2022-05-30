@@ -13,8 +13,8 @@ on:
     branches:
       - main
   release:
-      types:
-        - created
+    types: [published]
+
 env:
   push_to_registry: true
 
@@ -83,7 +83,7 @@ jobs:
         include:
           - release: lts
             version:
-    if: ${{ github.event.release.published  == true }}
+#    if: ${{ github.event.release.published == true }}
     steps:
       - uses: actions/checkout@v2
 
