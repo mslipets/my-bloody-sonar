@@ -43,7 +43,7 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
     # We need to make sure they will be owned by the sonarqube user
     if [ -z "${DISABLE_CHOWN_ON_STARTUP}" ]; then
         echo "Chowning $SONARQUBE_HOME"
-        if [ "sonarqube" != "$(stat -c %U "${SONAR_HOME}")" ]; then
+        if [ "sonarqube" != "$(stat -c %U "$SONARQUBE_HOME")" ]; then
             chown -R sonarqube:sonarqube "$SONARQUBE_HOME"
         fi
         echo "Chowning $SONARQUBE_HOME. Done"
@@ -54,7 +54,7 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
 
     # This changes the actual command to run the original sonarqube entrypoint
     # using the sonarqube user
-    set -- gosu sonarqube aws-env exec -- "bin/start.sh" "$@"
+    set -- gosu sonarqube aws-env exec -- "$SONARQUBE_HOME/bin/start.sh" "$@"
 fi
 
 exec "$@"
