@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-bin/run.sh java -jar lib/sonar-application-"$SONAR_VERSION".jar \
+$SONARQUBE_HOME/bin/run.sh java -jar $SONARQUBE_HOME/lib/sonar-application-$SONAR_VERSION.jar \
   -Dsonar.log.console=true \
   -Dsonar.jdbc.username="$SONAR_JDBC_USERNAME" \
   -Dsonar.jdbc.password="$SONAR_JDBC_PASSWORD" \
