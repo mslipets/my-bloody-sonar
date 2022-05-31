@@ -59,10 +59,7 @@ jobs:
     strategy:
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ "${{ needs.getVersion.outputs.version }}" ]
-        include:
-          - release: lts
-            version:
+        version: [ lts, "${{ needs.getVersion.outputs.version }}" ]
 
     steps:
       - name: Setup BATS
@@ -79,10 +76,7 @@ jobs:
     strategy:
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ "${{ needs.getVersion.outputs.version }}" ]
-        include:
-          - release: lts
-            version:
+        version: [ lts, "${{ needs.getVersion.outputs.version }}" ]
 #    if: ${{ github.event.release.published == true }}
     steps:
       - uses: actions/checkout@v2
