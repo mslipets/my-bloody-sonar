@@ -1,5 +1,7 @@
 name: my-bloody-sonar
 on:
+  schedule:
+    - cron: '0 3 1 * *'
   push:
     branches:
       - develop
