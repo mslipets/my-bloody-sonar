@@ -1,5 +1,7 @@
 name: my-bloody-sonar
 on:
+  schedule:
+    - cron: '0 3 1 * *'
   push:
     branches:
       - develop
@@ -16,7 +18,7 @@ on:
     types: [published]
 
 env:
-  push_to_registry: true
+  push_to_registry: false
 
 jobs:
 
@@ -69,63 +71,3 @@ jobs:
 
       - name: test test-${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
         run: make test VERSION=${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
-
-  publish-images:
-    needs: [ test, getVersion ]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        release: [ community, developer, enterprise ]
-        version: [ lts, "${{ needs.getVersion.outputs.version }}" ]
-#    if: ${{ github.event.release.published == true }}
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Login to Packages Container registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Login to Docker Hub registry
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            ghcr.io/mslipets/my-bloody-sonar
-            mslipets/my-bloody-sonar
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            type=raw,value=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
-            type=sha           
-
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          push: ${{ env.push_to_registry }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: FROM_TAG=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
-
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
-
-#      Disabled due to https://github.com/docker/hub-feedback/issues/1927
-#      untill resolution to https://github.com/docker/roadmap/issues/115 implemented.
-#      - name: Update repo description
-#        uses: christian-korneck/update-container-description-action@v1
-#        env:
-#          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
-#          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
-#        with:
-#          destination_container_repo: mslipets/my-bloody-sonar
-#          provider: dockerhub
-#          short_description: 'Self Configured SonarQube Docker image based on Official SonarSource Images'
-#          readme_file: 'README.md'
