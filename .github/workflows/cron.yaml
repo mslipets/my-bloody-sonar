@@ -1,0 +1,48 @@
+name: my-bloody-sonar-cron
+on:
+  schedule:
+    - cron: '0 3 1 * *'
+
+jobs:
+
+  getVersion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Retrieve latest version
+        run: echo ::set-output name=SONAR_TAG::$(curl -sL https://api.github.com/repos/SonarSource/docker-sonarqube/releases/latest | jq -r ".tag_name")
+        id: version-sonar
+
+      - name: 'Get latest tag'
+        uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+        if: ${{ steps.tag.outputs.tag == null }}
+        with:
+          semver_only: true
+
+      - name: 'strip_v'
+        id: version
+        if: ${{ steps.get-latest-tag.outputs.tag != null }}
+        run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo ::set-output name=version::${VERSION:1}
+
+      - name: 'Print latest SonarSource tag'
+        run: echo ${{ steps.version-sonar.outputs.SONAR_TAG }}
+
+      - name: 'Print Current Bloody tag'
+        run: echo ${{ steps.version.outputs.version }}
+
+    outputs:
+      version-sonar-upstream: ${{ steps.version-sonar.outputs.SONAR_TAG }}
+      version-sonar-current: ${{ steps.version.outputs.version }}
+
+  releases:
+    needs: getVersion
+    runs-on: ubuntu-latest
+    if: ${{ needs.getVersion.outputs.version-sonar-upstream > needs.getVersion.outputs.version-sonar-current }}
+    steps:
+      - name: 'New release'
+        run: >
+          curl -X POST -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases -d '{"tag_name":"v${{ needs.getVersion.outputs.version-sonar-upstream }}","target_commitish":"main","name":"v${{ needs.getVersion.outputs.version-sonar-upstream }}","body":"Release a new version ${{ needs.getVersion.outputs.version-sonar-upstream }}","draft":false,"prerelease":false,"generate_release_notes":true}'
