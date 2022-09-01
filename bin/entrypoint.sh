@@ -52,6 +52,13 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
         echo "Chowning $SONARQUBE_HOME disabled"
     fi
 
+    CLEAR_CACHE_ON_START=${CLEAR_CACHE_ON_START:-TRUE}
+    if [  ${CLEAR_CACHE_ON_START} == "TRUE" ]; then
+        echo "cleaning up ${SONARQUBE_HOME}/data/es7"
+        rm -Rf ${SONARQUBE_HOME}/data/es7
+        ls -l  ${SONARQUBE_HOME}/data
+    fi
+
     # This changes the actual command to run the original sonarqube entrypoint
     # using the sonarqube user
     set -- gosu sonarqube aws-env exec -- "$SONARQUBE_HOME/bin/start.sh" "$@"
