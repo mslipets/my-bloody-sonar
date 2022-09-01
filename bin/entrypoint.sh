@@ -53,7 +53,7 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
     fi
 
     CLEAR_CACHE_ON_START=${CLEAR_CACHE_ON_START:-TRUE}
-    if [  ${CLEAR_CACHE_ON_START} == "TRUE" ]; then
+    if [  "${CLEAR_CACHE_ON_START}" == "TRUE" ]; then
         echo "cleaning up ${SONARQUBE_HOME}/data/es7"
         rm -Rf ${SONARQUBE_HOME}/data/es7
         ls -l  ${SONARQUBE_HOME}/data
