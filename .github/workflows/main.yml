@@ -119,13 +119,19 @@ jobs:
 
 #      Disabled due to https://github.com/docker/hub-feedback/issues/1927
 #      untill resolution to https://github.com/docker/roadmap/issues/115 implemented.
-      - name: Update repo description
-        uses: christian-korneck/update-container-description-action@v1
+  deploy-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: docker login
+        shell: bash
         env:
-          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - name: Login to Packages Container registry
+        uses: docker/login-action@v1
         with:
-          destination_container_repo: mslipets/my-bloody-sonar
-          provider: dockerhub
-          short_description: 'Self Configured SonarQube Docker image based on Official SonarSource Imaes'
-          readme_file: 'README.md'
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
