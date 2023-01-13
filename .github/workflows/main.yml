@@ -45,7 +45,7 @@ jobs:
       - name: 'strip_v'
         id: version
         if: ${{ steps.get-latest-tag.outputs.tag != null }}
-        run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; ::set-output name=version::${VERSION:1}
+        run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo ::set-output name=version::${VERSION:1}
 
       - name: 'conditions check'
         run: echo ${{ steps.version.outputs.version || steps.tag.outputs.tag }}
@@ -127,5 +127,5 @@ jobs:
         with:
           destination_container_repo: mslipets/my-bloody-sonar
           provider: dockerhub
-          short_description: 'Self Configured SonarQube Docker image based on Official SonarSource Images'
+          short_description: 'Self Configured SonarQube Docker image based on Official SonarSource Imaes'
           readme_file: 'README.md'
