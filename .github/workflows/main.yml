@@ -98,8 +98,8 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ghcr.io/mslipets/my-bloody-sonar
-            mslipets/my-bloody-sonar
+            ghcr.io/sorinverescu/my-bloody-sonar
+            sorinverescu/my-bloody-sonar
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,value=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
