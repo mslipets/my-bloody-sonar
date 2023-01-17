@@ -2,6 +2,8 @@ name: my-bloody-sonar-cron
 on:
   schedule:
     - cron: '0 3 1 * *'
+  workflow_dispatch:
+  
 jobs:
   getVersion:
     runs-on: ubuntu-latest
