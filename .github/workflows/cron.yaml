@@ -37,10 +37,10 @@ jobs:
           output_name: SONAR_TAG
 
       - name: 'Print latest SonarSource tag'
-        run: echo ${{ steps.version-sonar.outputs.SONAR_TAG }}
+        run: echo ${{ steps.latest-sonar.outputs.SONAR_TAG }}
 
       - name: 'Print Current Bloody tag'
-        run: echo ${{ steps.version.outputs.version }}
+        run: echo ${{ steps.current-sonar.outputs.SONAR_TAG }}
 
     outputs:
       version-sonar-upstream: ${{ steps.latest-sonar.outputs.SONAR_TAG }}
