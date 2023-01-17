@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: '0 3 1 * *'
   workflow_dispatch:
-  
+
 jobs:
   getVersion:
     runs-on: ubuntu-latest
@@ -15,7 +15,7 @@ jobs:
 
       - name: Retrieve latest version
         run: echo "SONAR_TAG=$(curl -sL https://api.github.com/repos/SonarSource/docker-sonarqube/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
-        id: version-sonar
+        id: latest-sonar
 
       - name: 'Get latest tag'
         uses: actions-ecosystem/action-get-latest-tag@v1
@@ -24,16 +24,17 @@ jobs:
         with:
           semver_only: true
 
-#       - name: 'strip_v'
-#         id: version
-#         if: ${{ steps.get-latest-tag.outputs.tag != null }}
-#         run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo "version=${VERSION:1}" >> $GITHUB_OUTPUT
+      #       - name: 'strip_v'
+      #         id: version
+      #         if: ${{ steps.get-latest-tag.outputs.tag != null }}
+      #         run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo "version=${VERSION:1}" >> $GITHUB_OUTPUT
 
-      - name: 'strip_v'
-        id: version
-        if: ${{ steps.get-latest-tag.outputs.tag != null }}
-        run: echo "version=${{ steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
-
+      - uses: bhowell2/github-substring-action@v1.0.0
+        id: current-sonar
+        with:
+          value: ${{ steps.get-latest-tag.outputs.tag }}
+          index_of_str: "v"
+          output_name: SONAR_TAG
 
       - name: 'Print latest SonarSource tag'
         run: echo ${{ steps.version-sonar.outputs.SONAR_TAG }}
@@ -42,8 +43,8 @@ jobs:
         run: echo ${{ steps.version.outputs.version }}
 
     outputs:
-      version-sonar-upstream: ${{ steps.version-sonar.outputs.SONAR_TAG }}
-      version-sonar-current: ${{ steps.version.outputs.version }}
+      version-sonar-upstream: ${{ steps.latest-sonar.outputs.SONAR_TAG }}
+      version-sonar-current: ${{ steps.current-sonar.outputs.SONAR_TAG }}
 
   releases:
     needs: getVersion
