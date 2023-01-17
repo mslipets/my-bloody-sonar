@@ -8,12 +8,12 @@ jobs:
   getVersion:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout
         with:
           fetch-depth: 0
 
       - name: Retrieve latest version
-        run: echo ::set-output name=SONAR_TAG::$(curl -sL https://api.github.com/repos/SonarSource/docker-sonarqube/releases/latest | jq -r ".tag_name")
+        run: echo "SONAR_TAG=$(curl -sL https://api.github.com/repos/SonarSource/docker-sonarqube/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
         id: version-sonar
 
       - name: 'Get latest tag'
