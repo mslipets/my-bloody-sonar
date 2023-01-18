@@ -42,16 +42,23 @@ jobs:
         with:
           semver_only: true
         
-      - name: 'strip_v'
+#      - name: 'strip_v'
+#        id: version
+#        if: ${{ steps.get-latest-tag.outputs.tag != null }}
+#        run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo ::set-output name=version::${VERSION:1}
+        
+      - uses: bhowell2/github-substring-action@v1.0.0
         id: version
-        if: ${{ steps.get-latest-tag.outputs.tag != null }}
-        run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo ::set-output name=version::${VERSION:1}
+        with:
+          value: ${{ steps.get-latest-tag.outputs.tag }}
+          index_of_str: "v"
+          output_name: current_tag
 
       - name: 'conditions check'
-        run: echo ${{ steps.version.outputs.version || steps.tag.outputs.tag }}
+        run: echo ${{ steps.version.outputs.current_tag || steps.tag.outputs.tag }}
 
     outputs:
-      version: ${{ steps.version.outputs.version || steps.tag.outputs.tag }}
+      version: ${{ steps.version.outputs.current_tag || steps.tag.outputs.tag }}
 
   test:
     needs: getVersion
