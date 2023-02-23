@@ -105,8 +105,8 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ghcr.io/sorinverescu/my-bloody-sonar
-            sorinverescu/my-bloody-sonar
+            ghcr.io/${{ github.actor }}/my-bloody-sonar
+            ${{ github.actor }}/my-bloody-sonar
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,value=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
