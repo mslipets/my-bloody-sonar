@@ -12,7 +12,7 @@ function curl_test(){
     touch_config
     create_docker_network
 
-    JENKINS_ENV_CONFIG_YML_URL="file://${TESTS_CONTAINER_CONF_DIR}/conf" \
+    SONAR_ENV_CONFIG_YML_URL="file://${TESTS_CONTAINER_CONF_DIR}/conf" \
     docker_compose_up $COMPOSE_FILE
 
     health_check http://0.0.0.0:9000/login
