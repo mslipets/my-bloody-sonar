@@ -23,7 +23,7 @@ jobs:
   getVersion:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -64,9 +64,13 @@ jobs:
     needs: getVersion
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ lts, "${{ needs.getVersion.outputs.version }}" ]
+        version: [ 2025.2, "${{ needs.getVersion.outputs.version }}" ]
+        exclude:
+          - release: community
+            version: 2025.2
 
     steps:
       - name: Setup BATS
@@ -83,10 +87,14 @@ jobs:
     strategy:
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ lts, "${{ needs.getVersion.outputs.version }}" ]
+        version: [ 2025.2, "${{ needs.getVersion.outputs.version }}" ]
+        exclude:
+          - release: community
+            version: 2025.2
+
 #    if: ${{ github.event.release.published == true }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Login to Packages Container registry
         uses: docker/login-action@v1
@@ -96,7 +104,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ghcr.io/${{ github.actor }}/my-bloody-sonar
