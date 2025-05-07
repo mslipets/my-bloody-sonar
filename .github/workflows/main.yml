@@ -42,11 +42,6 @@ jobs:
         with:
           semver_only: true
         
-#      - name: 'strip_v'
-#        id: version
-#        if: ${{ steps.get-latest-tag.outputs.tag != null }}
-#        run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo ::set-output name=version::${VERSION:1}
-        
       - uses: bhowell2/github-substring-action@v1.0.0
         id: version
         with:
