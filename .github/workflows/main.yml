@@ -42,11 +42,6 @@ jobs:
         with:
           semver_only: true
         
-#      - name: 'strip_v'
-#        id: version
-#        if: ${{ steps.get-latest-tag.outputs.tag != null }}
-#        run: VERSION=${{ steps.get-latest-tag.outputs.tag }}; echo ::set-output name=version::${VERSION:1}
-        
       - uses: bhowell2/github-substring-action@v1.0.0
         id: version
         with:
@@ -88,6 +83,9 @@ jobs:
       matrix:
         release: [ community, developer, enterprise ]
         version: [ 2025.2, "${{ needs.getVersion.outputs.version }}" ]
+        exclude:
+          - release: community
+            version: 2025.2
 
 #    if: ${{ github.event.release.published == true }}
     steps:
@@ -104,8 +102,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/${{ github.actor }}/my-bloody-sonar
-            ${{ github.actor }}/my-bloody-sonar
+            ghcr.io/${{ github.repository_owner }}/my-bloody-sonarK
 
           # generate Docker tags based on the following events/attributes
           tags: |
