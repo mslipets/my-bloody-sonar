@@ -62,10 +62,12 @@ jobs:
       fail-fast: false
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ 2025.2, "${{ needs.getVersion.outputs.version }}" ]
+        version: [ "${{ needs.getVersion.outputs.version }}" ]
         exclude:
           - release: community
             version: 2025.2
+          - release: community
+            version: 2025.4
 
     steps:
       - name: Setup BATS
