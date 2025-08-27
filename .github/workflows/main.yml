@@ -56,9 +56,7 @@ jobs:
         version: [ "${{ needs.getVersion.outputs.version }}" ]
         exclude:
           - release: community
-            version: 2025.2
-          - release: community
-            version: 2025.4
+            version: 2025.4.2
 
     steps:
       - name: Setup BATS
