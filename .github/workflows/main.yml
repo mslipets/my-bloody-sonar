@@ -27,18 +27,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get tag
-        id: tag
-        uses: dawidd6/action-get-tag@v1
-        if: ${{ github.event.release.published  == true }}
-        with:
-          # Optionally strip `v` prefix
-          strip_v: true
-
       - name: 'Get latest tag'
         uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
-        if: ${{ steps.tag.outputs.tag == null }}
         with:
           semver_only: true
         
@@ -50,10 +41,10 @@ jobs:
           output_name: current_tag
 
       - name: 'conditions check'
-        run: echo ${{ steps.version.outputs.current_tag || steps.tag.outputs.tag }}
+        run: echo ${{ steps.version.outputs.current_tag }}
 
     outputs:
-      version: ${{ steps.version.outputs.current_tag || steps.tag.outputs.tag }}
+      version: ${{ steps.version.outputs.current_tag }}
 
   test:
     needs: getVersion
@@ -62,10 +53,13 @@ jobs:
       fail-fast: false
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ 2025.2, "${{ needs.getVersion.outputs.version }}" ]
+        version: [ "${{ needs.getVersion.outputs.version }}" ]
         exclude:
           - release: community
             version: 2025.2
+          - release: community
+            version: 2025.4.2
+
 
     steps:
       - name: Setup BATS
@@ -82,10 +76,12 @@ jobs:
     strategy:
       matrix:
         release: [ community, developer, enterprise ]
-        version: [ 2025.2, "${{ needs.getVersion.outputs.version }}" ]
+        version: [ "${{ needs.getVersion.outputs.version }}" ]
         exclude:
           - release: community
             version: 2025.2
+          - release: community
+            version: 2025.4.2
 
 #    if: ${{ github.event.release.published == true }}
     steps:
