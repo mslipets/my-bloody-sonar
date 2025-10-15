@@ -44,13 +44,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [ community, developer, enterprise ]
+        release: [ developer, enterprise ]
         version: [ "${{ needs.getVersion.outputs.version }}" ]
-        exclude:
-          - release: community
-            version: 2025.2
-          - release: community
-            version: 2025.4.2
 
 
     steps:
@@ -67,13 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        release: [ community, developer, enterprise ]
+        release: [ developer, enterprise ]
         version: [ "${{ needs.getVersion.outputs.version }}" ]
-        exclude:
-          - release: community
-            version: 2025.2
-          - release: community
-            version: 2025.4.2
 
 #    if: ${{ github.event.release.published == true }}
     steps:
