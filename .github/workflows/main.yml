@@ -27,24 +27,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Get latest tag'
-        uses: actions-ecosystem/action-get-latest-tag@v1
-        id: get-latest-tag
-        with:
-          semver_only: true
-        
-      - uses: bhowell2/github-substring-action@v1.0.0
-        id: version
-        with:
-          value: ${{ steps.get-latest-tag.outputs.tag }}
-          index_of_str: "v"
-          output_name: current_tag
-
-      - name: 'conditions check'
-        run: echo ${{ steps.version.outputs.current_tag }}
+      - name: Get latest tag
+        id: get_tag
+        run: |          
+          LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
+          echo "Latest tag: $LATEST_TAG"
+          # Set output for the step
+          echo "latest_tag=${LATEST_TAG#$v}" >> $GITHUB_OUTPUT
 
     outputs:
-      version: ${{ steps.version.outputs.current_tag }}
+      version: ${{ steps.get_tag.outputs.latest_tag }}
 
   test:
     needs: getVersion
