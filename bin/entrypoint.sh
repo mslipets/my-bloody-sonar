@@ -32,12 +32,20 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
         fi
     fi
 
-    if [ -n "$SONAR_ENV_PLUGINS" ]; then
-        echo "Installing additional plugins $SONAR_ENV_PLUGINS"
-        install-plugins.sh "$(echo "$SONAR_ENV_PLUGINS" | tr ',' ' ')"
-        chown chown -R sonarqube:sonarqube "$SONARQUBE_HOME/extensions/plugins"
-        echo "Installing additional plugins. Done..."
+    : "${PLUGINS_FILE:=$SONARQUBE_HOME/plugins.json}"
+    export PLUGINS_FILE
+
+    if [ -n "${SONAR_ENV_PLUGINS_JSON}" ]; then
+        echo "Writing plugins config from SONAR_ENV_PLUGINS_JSON to ${PLUGINS_FILE}"
+        printf '%s' "$SONAR_ENV_PLUGINS_JSON" > "$PLUGINS_FILE"
+        unset SONAR_ENV_PLUGINS_JSON
     fi
+
+    echo "Reconciling plugins (file=$PLUGINS_FILE, extras=${SONAR_ENV_PLUGINS:-<none>})"
+    # shellcheck disable=SC2046
+    install-plugins.sh $(echo "${SONAR_ENV_PLUGINS:-}" | tr ',' ' ')
+    chown -R sonarqube:sonarqube "$SONARQUBE_HOME/extensions/plugins"
+    echo "Plugin reconciliation done."
 
     # This is important if you let docker create the host mounted volumes.
     # We need to make sure they will be owned by the sonarqube user

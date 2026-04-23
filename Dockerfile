@@ -71,6 +71,7 @@ ENV CONFIG_CACHE_DIR=/dev/shm/.sonar-config-cache
 
 RUN chown -R sonarqube "$SONARQUBE_HOME"
 COPY --chown=sonarqube bin/* $SONARQUBE_HOME/bin/
+COPY --chown=sonarqube plugins.json.example $SONARQUBE_HOME/plugins.json
 
 # We will change the user to sonarqube using gosu
 ENV PATH="${SONARQUBE_HOME}/bin":$PATH
