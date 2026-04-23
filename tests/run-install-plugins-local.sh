@@ -2,13 +2,15 @@
 #
 # Local validation harness for bin/install-plugins.sh.
 #
-# Runs the script against plugins.json.example (prod baseline) using
-# tests/tmp as the install target (no SonarQube container required):
-#   1. clean install        — all 5 plugins download and MD5-verify
+# Uses tests/tmp as the install target (no SonarQube container required):
+#   1. clean install        — installs 5 plugins at PROD baseline versions
+#                             (tests/fixtures/plugins-prod-baseline.json)
 #   2. idempotency          — second run with untouched dir skips every plugin
 #   3. hash-mismatch        — a corrupted JAR is detected and re-downloaded
-#   4. version upgrade      — switching config to a new-version fixture replaces
-#                             old JARs and prunes superseded ones
+#   4. version upgrade      — switching config to plugins.json.example (the
+#                             latest-targets file) replaces old JARs and
+#                             prunes superseded ones
+#   5. post-upgrade idem    — re-run against plugins.json.example is all skips
 #
 # Requires network egress to downloads.sonarsource.com and github.com.
 #
@@ -74,11 +76,11 @@ verify_set() {
 step "1. Clean install (prod baseline)"
 rm -rf "$TMP_DIR"
 mkdir -p "$PLUGINS_DIR"
-PLUGINS_FILE="$PROJECT_ROOT/plugins.json.example" "$SCRIPT"
+PLUGINS_FILE="$PROJECT_ROOT/tests/fixtures/plugins-prod-baseline.json" "$SCRIPT"
 verify_set PROD_EXPECTED
 
 step "2. Idempotency (re-run without changes)"
-out=$(PLUGINS_FILE="$PROJECT_ROOT/plugins.json.example" "$SCRIPT" 2>&1)
+out=$(PLUGINS_FILE="$PROJECT_ROOT/tests/fixtures/plugins-prod-baseline.json" "$SCRIPT" 2>&1)
 echo "$out"
 if grep -Eq '^\[install-plugins\] fetch  ' <<<"$out"; then
     err "unexpected plugin-fetch lines on idempotent rerun"
@@ -99,7 +101,7 @@ fi
 
 step "3. Hash-mismatch recovery (corrupt yaml JAR)"
 echo "corrupted" > "$PLUGINS_DIR/sonar-yaml-plugin-1.9.1.jar"
-out=$(PLUGINS_FILE="$PROJECT_ROOT/plugins.json.example" "$SCRIPT" 2>&1)
+out=$(PLUGINS_FILE="$PROJECT_ROOT/tests/fixtures/plugins-prod-baseline.json" "$SCRIPT" 2>&1)
 echo "$out"
 if grep -Eq '^\[install-plugins\] stale.*yaml' <<<"$out"; then
     ok "stale yaml JAR detected"
@@ -109,7 +111,7 @@ fi
 verify_set PROD_EXPECTED
 
 step "4. Version upgrade (swap config, expect new JARs + prune old)"
-out=$(PLUGINS_FILE="$PROJECT_ROOT/tests/fixtures/plugins-upgrade-target.json" "$SCRIPT" 2>&1)
+out=$(PLUGINS_FILE="$PROJECT_ROOT/plugins.json.example" "$SCRIPT" 2>&1)
 echo "$out"
 verify_set UPGRADE_EXPECTED
 # Assert stale JARs were pruned
@@ -138,7 +140,7 @@ for key in checkstyle yaml; do
 done
 
 step "5. Idempotency after upgrade (re-run should be all skips, no prunes)"
-out=$(PLUGINS_FILE="$PROJECT_ROOT/tests/fixtures/plugins-upgrade-target.json" "$SCRIPT" 2>&1)
+out=$(PLUGINS_FILE="$PROJECT_ROOT/plugins.json.example" "$SCRIPT" 2>&1)
 echo "$out"
 if grep -Eq '^\[install-plugins\] fetch  ' <<<"$out"; then
     err "unexpected plugin-fetch after upgrade idempotent rerun"
