@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    { "key": "checkstyle",      "version": "10.26.1", "hash": "0ac86b9da1070d57b55034cde235ac1f",
+      "downloadUrl": "https://github.com/checkstyle/sonar-checkstyle/releases/download/10.26.1/checkstyle-sonar-plugin-10.26.1.jar" },
+    { "key": "dependencycheck", "version": "6.0.0",   "hash": "b07467cd5050923a252771867828274e" },
+    { "key": "findbugs",        "version": "4.6.0",   "hash": "a2d327cb698bc26dfd53952410929939",
+      "downloadUrl": "https://github.com/spotbugs/sonar-findbugs/releases/download/v4.6.0/sonar-findbugs-plugin-v4.6.0.jar" },
+    { "key": "pmd",             "version": "4.2.1",   "hash": "776f54494b5e640c71d064035145396f" },
+    { "key": "yaml",            "version": "1.9.1",   "hash": "4c4570e8374bcc74d4cf61e56d1540fd",
+      "downloadUrl": "https://github.com/sbaudoin/sonar-yaml/releases/download/v1.9.1/sonar-yaml-plugin-1.9.1.jar" }
+  ]
+}

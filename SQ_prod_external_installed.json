@@ -1,0 +1,136 @@
+{
+  "key": "checkstyle",
+  "name": "Checkstyle",
+  "description": "Analyze Java code with Checkstyle",
+  "version": "10.26.1",
+  "license": "LGPL-3.0",
+  "organizationName": "Checkstyle",
+  "organizationUrl": "https://checkstyle.org",
+  "editionBundled": false,
+  "issueTrackerUrl": "https://github.com/checkstyle/sonar-checkstyle/issues",
+  "implementationBuild": "",
+  "filename": "checkstyle-sonar-plugin-10.26.1.jar",
+  "hash": "0ac86b9da1070d57b55034cde235ac1f",
+  "sonarLintSupported": false,
+  "updatedAt": 1755872565415,
+  "type": "EXTERNAL",
+  "requiredForLanguages": [
+    "java"
+  ]
+}
+{
+  "key": "dependencycheck",
+  "name": "Dependency-Check",
+  "description": "Integrates Dependency-Check reports into SonarQube",
+  "version": "3.0.1",
+  "license": "GNU LGPL 3",
+  "organizationName": "OWASP",
+  "organizationUrl": "http://www.owasp.org",
+  "editionBundled": false,
+  "homepageUrl": "https://www.owasp.org/index.php/OWASP_Dependency_Check",
+  "issueTrackerUrl": "https://github.com/dependency-check/dependency-check-sonar-plugin/issues",
+  "implementationBuild": "313f379c7a61bcc21f59b3b24f655c5474c19778",
+  "filename": "sonar-dependency-check-plugin-3.0.1.jar",
+  "hash": "a28d843dccf2c1d53db8a682552b3c76",
+  "sonarLintSupported": false,
+  "updatedAt": 1740751709148,
+  "type": "EXTERNAL",
+  "requiredForLanguages": []
+}
+{
+  "key": "findbugs",
+  "name": "Findbugs",
+  "description": "Analyze Java, Scala, Closure and JSP code with SpotBugs. 4.9.3",
+  "version": "4.5.2",
+  "license": "GNU LGPL 3",
+  "organizationName": "SpotBugs Team",
+  "organizationUrl": "https://github.com/spotbugs/",
+  "editionBundled": false,
+  "homepageUrl": "https://github.com/spotbugs/sonar-findbugs/",
+  "issueTrackerUrl": "https://github.com/spotbugs/sonar-findbugs/issues",
+  "implementationBuild": "",
+  "filename": "sonar-findbugs-plugin-4.5.2.jar",
+  "hash": "76c77eb649ca49b8a64b6acab3d2faa7",
+  "sonarLintSupported": false,
+  "documentationPath": "static/documentation.md",
+  "updatedAt": 1755872082141,
+  "type": "EXTERNAL",
+  "requiredForLanguages": [
+    "java",
+    "scala",
+    "jsp",
+    "clojure",
+    "kotlin"
+  ]
+}
+{
+  "key": "groovy",
+  "name": "Groovy",
+  "description": "Code Analyzer for Groovy",
+  "version": "1.8",
+  "license": "GNU LGPL 3",
+  "organizationName": "SonarQube Community",
+  "editionBundled": false,
+  "homepageUrl": "http://redirect.sonarsource.com/plugins/groovy.html",
+  "issueTrackerUrl": "https://github.com/Inform-Software/sonar-groovy/issues",
+  "implementationBuild": "6f5ddad1c7cf86e39cd9a8fc0be896660b4d4b61",
+  "filename": "sonar-groovy-plugin-1.8.jar",
+  "hash": "152d41171495dc0b3f4c572a7d3631e3",
+  "sonarLintSupported": false,
+  "updatedAt": 1740751709153,
+  "type": "EXTERNAL",
+  "requiredForLanguages": []
+}
+{
+  "key": "pmd",
+  "name": "PMD",
+  "description": "Analyze Java code with PMD.",
+  "version": "4.1.0",
+  "license": "GNU LGPL 3",
+  "editionBundled": false,
+  "homepageUrl": "https://github.com/jborgers/sonar-pmd",
+  "issueTrackerUrl": "https://github.com/jborgers/sonar-pmd/issues",
+  "implementationBuild": "",
+  "filename": "sonar-pmd-plugin-4.1.0.jar",
+  "hash": "cf51268f941e3f4fac7a8fffdada5936",
+  "sonarLintSupported": false,
+  "updatedAt": 1755872565411,
+  "type": "EXTERNAL",
+  "requiredForLanguages": [
+    "java"
+  ]
+}
+{
+  "key": "quboo",
+  "name": "Quboo",
+  "description": "Provides integration with Quboo to use Gamification techniques to fix your legacy code.",
+  "version": "1.4.2",
+  "license": "GNU LGPL 3",
+  "organizationName": "Quboo",
+  "organizationUrl": "https://quboo.io",
+  "editionBundled": false,
+  "homepageUrl": "https://github.com/thepracticaldeveloper/quboo-sonarqube-plugin",
+  "issueTrackerUrl": "https://github.com/thepracticaldeveloper/quboo-sonarqube-plugin/issues",
+  "filename": "quboo-sonar-plugin-1.4.2.jar",
+  "hash": "3a0618bb9363d052a05b49b09dccdffe",
+  "sonarLintSupported": false,
+  "updatedAt": 1740751709150,
+  "type": "EXTERNAL",
+  "requiredForLanguages": []
+}
+{
+  "key": "yaml",
+  "name": "YAML Analyzer",
+  "description": "YAML 1.1 plugin for SonarQube",
+  "version": "1.9.1",
+  "license": "Apache License, Version 2.0",
+  "editionBundled": false,
+  "homepageUrl": "https://github.com/sbaudoin/sonar-yaml",
+  "issueTrackerUrl": "https://github.com/sbaudoin/sonar-yaml/issues",
+  "filename": "sonar-yaml-plugin-1.9.1.jar",
+  "hash": "4c4570e8374bcc74d4cf61e56d1540fd",
+  "sonarLintSupported": false,
+  "updatedAt": 1755872565416,
+  "type": "EXTERNAL",
+  "requiredForLanguages": []
+}
