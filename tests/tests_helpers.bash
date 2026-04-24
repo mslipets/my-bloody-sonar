@@ -47,16 +47,24 @@ function docker_compose_exec(){
 
 function health_check(){
     url=$1
-    echo "checking $url"
-    while ! curl -f -s "$url" > /dev/null
-    do
+    timeout=${HEALTH_CHECK_TIMEOUT:-300}
+    echo "checking $url (timeout ${timeout}s)"
+    deadline=$(( $(date +%s) + timeout ))
+    while ! curl -f -s "$url" > /dev/null; do
+        if [[ $(date +%s) -ge $deadline ]]; then
+            echo "health_check timed out after ${timeout}s: $url" >&2
+            return 1
+        fi
         sleep 5
     done
 }
 
 function create_docker_network(){
-    docker network rm "$SONAR_DOCKER_NETWORK_NAME" || true
-    docker network create -d bridge --attachable "$SONAR_DOCKER_NETWORK_NAME" || true
+    for ctr in $(docker network inspect -f '{{range .Containers}}{{.Name}} {{end}}' "$SONAR_DOCKER_NETWORK_NAME" 2>/dev/null); do
+        docker network disconnect --force "$SONAR_DOCKER_NETWORK_NAME" "$ctr" 2>/dev/null || true
+    done
+    docker network rm "$SONAR_DOCKER_NETWORK_NAME" 2>/dev/null || true
+    docker network create -d bridge --attachable "$SONAR_DOCKER_NETWORK_NAME"
     docker network ls | grep "$SONAR_DOCKER_NETWORK_NAME"
 }
 
