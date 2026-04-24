@@ -44,7 +44,7 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
     echo "Reconciling plugins (file=$PLUGINS_FILE, extras=${SONAR_ENV_PLUGINS:-<none>})"
     # shellcheck disable=SC2046
     install-plugins.sh $(echo "${SONAR_ENV_PLUGINS:-}" | tr ',' ' ')
-    chown -R sonarqube:sonarqube "$SONARQUBE_HOME/extensions/plugins"
+    chown -R sonarqube "$SONARQUBE_HOME/extensions/plugins"
     echo "Plugin reconciliation done."
 
     # This is important if you let docker create the host mounted volumes.
@@ -52,7 +52,7 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
     if [ -z "${DISABLE_CHOWN_ON_STARTUP}" ]; then
         echo "Chowning $SONARQUBE_HOME"
         if [ "sonarqube" != "$(stat -c %U "$SONARQUBE_HOME")" ]; then
-            chown -R sonarqube:sonarqube "$SONARQUBE_HOME"
+            chown -R sonarqube "$SONARQUBE_HOME"
         fi
         echo "Chowning $SONARQUBE_HOME. Done"
         unset DISABLE_CHOWN_ON_STARTUP
