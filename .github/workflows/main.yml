@@ -24,7 +24,7 @@ jobs:
   getVersion:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -53,7 +53,7 @@ jobs:
       - name: Setup BATS
         run: sudo npm install -g bats
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: test test-${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
         run: make test VERSION=${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
@@ -68,7 +68,7 @@ jobs:
 
 #    if: ${{ github.event.release.published == true }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Login to Packages Container registry
         uses: docker/login-action@v3
