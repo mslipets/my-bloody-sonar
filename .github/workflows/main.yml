@@ -23,21 +23,33 @@ jobs:
 
   getVersion:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Get latest tag
         id: get_tag
-        run: |          
+        run: |
           LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
           echo "Latest tag: $LATEST_TAG"
-          # Set output for the step
           echo "latest_tag=${LATEST_TAG#v}" >> $GITHUB_OUTPUT
+
+      - name: Resolve closest community version
+        id: community_version
+        run: |
+          # Pick the versioned community tag with the highest build number.
+          COMMUNITY_VERSION=$(curl -fsSL \
+            "https://registry.hub.docker.com/v2/repositories/library/sonarqube/tags/?page_size=50&name=community" \
+            | jq -r '.results[].name
+                     | select(test("^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-community$"))' \
+            | sort -t. -k4 -V | tail -1)
+          echo "community_version=${COMMUNITY_VERSION}" >> $GITHUB_OUTPUT
+          echo "Resolved community version: ${COMMUNITY_VERSION}"
 
     outputs:
       version: ${{ steps.get_tag.outputs.latest_tag }}
+      community_version: ${{ steps.community_version.outputs.community_version }}
 
   test:
     needs: getVersion
@@ -47,6 +59,9 @@ jobs:
       matrix:
         release: [ developer, enterprise ]
         version: [ "${{ needs.getVersion.outputs.version }}" ]
+        include:
+          - release: community
+            from_tag: "${{ needs.getVersion.outputs.community_version }}"
 
 
     steps:
@@ -55,8 +70,8 @@ jobs:
 
       - uses: actions/checkout@v5
 
-      - name: test test-${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
-        run: make test VERSION=${{ matrix.version != '' && format('{0}-{1}',matrix.version, matrix.release) || format('{0}', matrix.release) }}
+      - name: test test-${{ matrix.from_tag || format('{0}-{1}', matrix.version, matrix.release) }}
+        run: make test VERSION=${{ matrix.from_tag || format('{0}-{1}', matrix.version, matrix.release) }}
 
   publish-images:
     needs: [ test, getVersion ]
@@ -65,6 +80,9 @@ jobs:
       matrix:
         release: [ developer, enterprise ]
         version: [ "${{ needs.getVersion.outputs.version }}" ]
+        include:
+          - release: community
+            from_tag: "${{ needs.getVersion.outputs.community_version }}"
 
 #    if: ${{ github.event.release.published == true }}
     steps:
@@ -85,8 +103,8 @@ jobs:
 
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=raw,value=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
-            type=sha           
+            type=raw,value=${{ matrix.from_tag || format('{0}-{1}', matrix.version, matrix.release) }}
+            type=sha
 
       - name: Build and push
         id: docker_build
@@ -95,7 +113,7 @@ jobs:
           push: ${{ env.push_to_registry }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: FROM_TAG=${{ matrix.version != '' && format('{0}-{1}', matrix.version, matrix.release) || matrix.release }}
+          build-args: FROM_TAG=${{ matrix.from_tag || format('{0}-{1}', matrix.version, matrix.release) }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
